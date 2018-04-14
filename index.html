@@ -9,9 +9,9 @@
   	}
   	#game
 	{
+		background:#636363;
 	    display: block;
 	    margin: 0px auto;
-	    background:#000 url(imgs/floor.png) center center;
 	}
   	</style>
 <body>dsa
@@ -50,8 +50,8 @@
 		        Crafty.viewport.clampToEntities = false;
   	 	 		Crafty.viewport.bounds = {min:{x:0, y:0}, max:{x:20, y:20}};
   	 	 		Crafty.viewport.clampToEntities = false;
-				//Crafty.viewport.follow(this);
-				//Crafty.viewport.scale(8);
+				Crafty.viewport.follow(this);
+				Crafty.viewport.scale(8);
 
 		        this.bind('Move', function(evt) {
 		        	this.hitbox.attr({x: (this.x + this.w / 2) - 3, y: (this.y + this.h / 2) - 3, w: 5, h: 6});
@@ -59,6 +59,19 @@
 		        	if(this.collide == false) {
 		        		return;
 		        	}
+
+		        	// stops player going through level
+		        	if(this.x < 0) {
+		        		this.x = 1;
+		        	} else if(this.x > (this.game.tile * dimensions) - this.w) {
+		        		this.x = this.game.tile * dimensions - this.w;
+		        	} else if(this.y < 0) {
+		        		this.y = 1;
+		        	} else if(this.y > (this.game.tile * dimensions) - this.h) {
+		        		this.y = this.game.tile * dimensions - this.h;
+		        	}
+
+		        	//console.log(this.tile * dimensions)
 
 					var wallCollisions = this.hitbox.hit('Wall');
 					var endCollisions = this.hitbox.hit('EndPoint');
