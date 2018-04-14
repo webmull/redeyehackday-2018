@@ -150,6 +150,9 @@
 		        this.reel('PlayerAttackDown',500, 0, 5, 3);
 		        this.reel('PlayerAttackSide',500, 0, 6, 3);
 		        this.reel('PlayerAttackUp',500, 0, 7, 3);
+		        this.reel('PlayerHitUp',500, 0, 8, 3);
+                this.reel('PlayerHitSide',500, 0, 9, 3);
+                this.reel('PlayerHitDown',500, 0, 10, 3);
 		     	this.hitbox = Crafty.e('2D, Canvas, Color, Collision, PlayerHitArea').attr({health:100});
 		        this.state = 'PlayerIdle';
 				this.animate(this.state, -1);
@@ -159,6 +162,7 @@
 		        this.game = null;
 		        this.camera = false;
 		        this.collide = false;
+		        this.beingHit = false;
 		       
 		        Crafty.viewport.clampToEntities = false;
   	 	 		Crafty.viewport.bounds = {min:{x:0, y:0}, max:{x:20, y:20}};
@@ -167,6 +171,7 @@
 				Crafty.viewport.scale(8);
 
 		        this.bind('Move', function(evt) {
+		        	this.beingHit = false;
 		        	this.hitbox.attr({x: (this.x + this.w / 2) - 3, y: (this.y + this.h / 2) - 3, w: 5, h: 6});
 
 		        	if(this.collide == false) {
@@ -200,6 +205,7 @@
 	    			var slimeCollisions = this.hitbox.hit('SlimeHitArea');
 
 	    			if(slimeCollisions) {
+	    				this.beingHit = true;
 		    			for(var j = 0; j < slimeCollisions.length; j++) {
 		    				if(this.attacking) {
 		    					slimeCollisions[j].obj.health -= 1.8;
@@ -212,7 +218,6 @@
 				});
 
 				this.bind('UpdateFrame', function() {
-	
 					var k = false;
 					var state = 'PlayerIdle';
 					this.attacking = false;
@@ -254,6 +259,15 @@
 						}
 						else if(state == 'PlayerSide'){
 							state = 'PlayerAttackSide';
+						}
+					}
+
+				
+					if(this.beingHit) {
+						state = 'PlayerHitUp';
+						this.hitbox.health -= 1;
+						if(this.hitbox.health < 0) {
+							Crafty.enterScene('GameOver'); // player dead - game over
 						}
 					}
 
