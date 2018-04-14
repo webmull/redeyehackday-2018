@@ -17,7 +17,7 @@
 <body>dsa
 	<div id="game"></div>
 	<script type="text/javascript">
-		var dimensions = 32;
+		var dimensions = 30;
 
 		Crafty.sprite(48, 'imgs/brandon.png', {
 			PlayerSprite:[0, 0]
@@ -27,7 +27,7 @@
 			SlimeSprite:[0, 0]
 		});
 
-		Crafty.sprite(32, 'imgs/walls/wall_1.png', {
+		Crafty.sprite(30, 'imgs/walls/wall_1.png', {
 			Wall_1:[0, 0]
 		});
 
@@ -112,7 +112,7 @@
 					var toPlayerX = Crafty('Player').x - this.x;
 					var toPlayerY = Crafty('Player').y - this.y;
 
-					if(Math.abs(toPlayerX) > 5 ||  Math.abs(toPlayerY) > 5) {
+					if(Math.abs(toPlayerX) > 1 ||  Math.abs(toPlayerY) > 1) {
 						// Normalize
 						var toPlayerLength = Math.sqrt(toPlayerX * toPlayerX + toPlayerY * toPlayerY);
 						toPlayerX = toPlayerX / toPlayerLength;
@@ -431,7 +431,7 @@
 		Crafty.defineScene('MainMenu', game.mainMenu.bind(game));
 		Crafty.defineScene('GameOver', game.gameOver.bind(game));
 		Crafty.defineScene('GameStart', game.gameStart.bind(game));
-		Crafty.enterScene('GameStart');
+		Crafty.enterScene('MainMenu');
 	</script>
 </body>
 </html>
