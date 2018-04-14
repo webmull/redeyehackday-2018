@@ -206,14 +206,19 @@
 		        this.camera = false;
 		        this.collide = false;
 		        this.beingHit = false;
+		        this.level = 1;
 		       
 		        Crafty.viewport.clampToEntities = false;
   	 	 		Crafty.viewport.bounds = {min:{x:0, y:0}, max:{x:20, y:20}};
   	 	 		Crafty.viewport.clampToEntities = false;
-				Crafty.viewport.follow(this);
-				Crafty.viewport.scale(8);
+				//Crafty.viewport.follow(this);
+				//Crafty.viewport.scale(8);
+				
+
+				
 
 		        this.bind('Move', function(evt) {
+
 		        	this.beingHit = false;
 		        	this.hitbox.attr({x: (this.x + this.w / 2) - 3, y: (this.y + this.h / 2) - 3, w: 5, h: 6});
 
@@ -243,6 +248,7 @@
 	    				this.hitbox.y -= wallCollisionData.overlap * wallCollisionData.ny;
 	    			} else if(endCollisions) {
 						Crafty.enterScene('GameStart');
+						this.level += 1;
 	    			}
 
 	    			var slimeCollisions = this.hitbox.hit('SlimeHitArea');
@@ -305,6 +311,12 @@
 						}
 					}
 
+					var healthText = Crafty.e('2D, DOM, Text')
+				.attr({x: 10, y: 10}).textColor('red');;
+				healthText.text('Health:'+ this.hitbox.health);
+				var levelText = Crafty.e('2D, DOM, Text')
+				.attr({x: 10, y: 20}).textColor('red');;
+				levelText.text('Level:'+ this.level);
 				
 					if(this.beingHit) {
 						state = 'PlayerHitUp';
@@ -362,7 +374,19 @@
 				this.placeStartPoint();
 				this.placeEndPoint();
 				this.placeEnemies();
+				this.level += 1;
+				//this.placeHUD();
 			},
+
+			this.placeHUD = function() {
+				//var health = this.hitbox.health;
+				var healthText = Crafty.e('2D, DOM, Text')
+				.attr({x: 10, y: 10});
+				healthText.text('Health:');
+				var levelText = Crafty.e('2D, DOM, Text')
+				.attr({x: 10, y: 20});
+				levelText.text('Level:');
+			}
 
 			this.placeEnemies = function() {
 				var placed = false;
