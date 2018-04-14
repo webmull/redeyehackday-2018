@@ -122,6 +122,8 @@
 	    				
 	    				if(this.movementState == 'LEFT') {
 	    					this.movementState = 'RIGHT';
+	    					this.state = 'SlimeSide';
+		        			this.flip('X');
 	    				} else if(this.movementState == 'RIGHT') {
 	    					this.movementState = 'LEFT';
 	    				} else if(this.movementState == 'UP') {
@@ -140,12 +142,18 @@
 					if(this.chasing == false) {
 						if(this.movementState == 'UP') {
 							this.y -= 0.5 * (eventData.dt / 1000) * this.enemyspeed;
+							state = 'SlimeUp';
 						} else if(this.movementState == 'DOWN') {
 							this.y += 0.5 * (eventData.dt / 1000) * this.enemyspeed;
+							state = 'SlimeDown';
 						} else if(this.movementState == 'LEFT') {
 							this.x -= 0.5 * (eventData.dt / 1000) * this.enemyspeed;
+							state = 'SlimeSide';
+		        			this.flip('X');
 						} else if (this.movementState == 'RIGHT') {
 							this.x += 0.5 * (eventData.dt / 1000) * this.enemyspeed;
+							state = 'SlimeSide';
+		        			this.unflip('X');
 						}
 					} else {
 						if(Math.abs(toPlayerX) > 0 ||  Math.abs(toPlayerY) > 0) {
@@ -203,7 +211,7 @@
   	 	 		Crafty.viewport.bounds = {min:{x:0, y:0}, max:{x:20, y:20}};
   	 	 		Crafty.viewport.clampToEntities = false;
 				Crafty.viewport.follow(this);
-				Crafty.viewport.scale(8);
+				Crafty.viewport.scale(4);
 
 		        this.bind('Move', function(evt) {
 		        	this.beingHit = false;
@@ -332,7 +340,7 @@
 				  });
 
 		 		 Crafty.e('2D, Canvas, Image').image('imgs/angel.png').attr({w: 299, h: 299, x: 150, dir: 'down'}).bind('UpdateFrame', function(eventData) {
-		 		 	
+
 		 		 	if(this.dir == 'down') {
 		 		 		this.y += 15 * (eventData.dt / 500);
 		 		 		if(this.y > 100) {
@@ -482,7 +490,7 @@
 		Crafty.defineScene('MainMenu', game.mainMenu.bind(game));
 		Crafty.defineScene('GameOver', game.gameOver.bind(game));
 		Crafty.defineScene('GameStart', game.gameStart.bind(game));
-		Crafty.enterScene('GameStart');
+		Crafty.enterScene('MainMenu');
 	</script>
 </body>
 </html>
