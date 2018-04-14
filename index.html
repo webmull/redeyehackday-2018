@@ -10,21 +10,17 @@
   	#game
 	{
 	    display: block;
-	    margin: 50px auto;
-	    background: #cdcdcd;
+	    margin: 0px auto;
+	    background:#000 url(imgs/floor.png) center center;
 	}
   	</style>
-<body>
+<body>dsa
 	<div id="game"></div>
 	<script type="text/javascript">
 		var dimensions = 30;
 
 		Crafty.sprite(48, 'imgs/brandon.png', {
-			PlayerSprite:[0, 0],
-			//PlayerWeaponSelect:[0, 1],
-			//PlayerDown:[0, 2],
-			//PlayerSide:[0, 3],
-			//PlayerUp:[0, 4]
+			PlayerSprite:[0, 0]
 		})
 
 		Crafty.c('Player', {
@@ -54,8 +50,8 @@
 		        Crafty.viewport.clampToEntities = false;
   	 	 		Crafty.viewport.bounds = {min:{x:0, y:0}, max:{x:20, y:20}};
   	 	 		Crafty.viewport.clampToEntities = false;
-				Crafty.viewport.follow(this);
-				Crafty.viewport.scale(8);
+				//Crafty.viewport.follow(this);
+				//Crafty.viewport.scale(8);
 
 		        this.bind('Move', function(evt) {
 		        	this.hitbox.attr({x: (this.x + this.w / 2) - 3, y: (this.y + this.h / 2) - 3, w: 5, h: 6});
@@ -162,7 +158,6 @@
 		 	// scenes
 		 	this.gameStart = function() {
 				Crafty.init(dimensions * this.tile, dimensions * this.tile, document.getElementById('game'));
-				
 				this.renderMap();
 				this.placeStartPoint();
 				this.placeEndPoint();
@@ -252,13 +247,13 @@
 		 	},
 
 		 	this.mainMenu = function() {
-		 		//alert('test');
-				Crafty.background('#000');
-				Crafty.e('2D, DOM, Text')
-				      .attr({ w: 100, h: 20, x: 150, y: 120 })
-				      .text('Main Menu')
-				      .textAlign('center')
-				      .textColor('#FFFFFF');
+		 		Crafty.init(dimensions * this.tile, dimensions * this.tile, document.getElementById('game'));
+		 		Crafty.e('2D, Canvas, Image').image('imgs/main_menu.png').attr({w: 600, h: 600})
+		 		 .bind('KeyDown', function(e) {
+				    if (e.key == Crafty.keys.ENTER) {
+				      Crafty.enterScene('GameStart');
+				    }
+				  });
 		 	},
 
 		 	this.gameOver = function() {
@@ -274,9 +269,7 @@
 		Crafty.defineScene('MainMenu', game.mainMenu.bind(game));
 		Crafty.defineScene('GameOver', game.gameOver.bind(game));
 		Crafty.defineScene('GameStart', game.gameStart.bind(game));
-
-		Crafty.enterScene('GameStart');
-
+		Crafty.enterScene('MainMenu');
 	</script>
 </body>
 </html>
