@@ -322,6 +322,31 @@
 		 	this.tile = 20;
 		 	this.map = [];
 
+		 	this.gameOver = function() {
+				Crafty.init(dimensions * this.tile, dimensions * this.tile, document.getElementById('game'));
+		 		Crafty.e('2D, Canvas, Image').image('imgs/game_over.png').attr({w: 600, h: 600})
+		 		 .bind('KeyDown', function(e) {
+				    if (e.key == Crafty.keys.ENTER) {
+				      Crafty.enterScene('MainMenu');
+				    }
+				  });
+
+		 		 Crafty.e('2D, Canvas, Image').image('imgs/angel.png').attr({w: 299, h: 299, x: 150, dir: 'down'}).bind('UpdateFrame', function(eventData) {
+		 		 	
+		 		 	if(this.dir == 'down') {
+		 		 		this.y += 15 * (eventData.dt / 500);
+		 		 		if(this.y > 100) {
+		 		 		  this.dir = 'up';
+			 		 	}
+		 		 	} else if(this.dir == 'up') {
+		 		 		this.y -= 15 * (eventData.dt / 500);
+		 		 		if(this.y < 10) {
+		 		 			this.dir = 'down';
+		 		 		}
+		 		 	}
+		 		 })
+		 	},
+
 		 	// scenes
 		 	this.gameStart = function() {
 				Crafty.init(dimensions * this.tile, dimensions * this.tile, document.getElementById('game'));
@@ -451,26 +476,13 @@
 				      Crafty.enterScene('GameStart');
 				    }
 				  });
-		 	},
-
-		 	this.gameOver = function() {
-				Crafty.e('2D, DOM, Text')
-				      .attr({ w: 100, h: 20, x: 150, y: 120 })
-				      .text('Game Over')
-				      .textAlign('center')
-				      .textColor('#FFFFFF')
-				      .bind('KeyDown', function(e) {
-				    if (e.key == Crafty.keys.ENTER) {
-				      Crafty.enterScene('MainMenu');
-				    }
-				  });
 		 	}
 		 }
 	
 		Crafty.defineScene('MainMenu', game.mainMenu.bind(game));
 		Crafty.defineScene('GameOver', game.gameOver.bind(game));
 		Crafty.defineScene('GameStart', game.gameStart.bind(game));
-		Crafty.enterScene('MainMenu');
+		Crafty.enterScene('GameStart');
 	</script>
 </body>
 </html>
