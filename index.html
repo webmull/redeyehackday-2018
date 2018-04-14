@@ -19,6 +19,12 @@
 	<script type="text/javascript">
 		var dimensions = 30;
 
+		// Here we're just loading a single sound, and calling it "beep".
+// But you can load multiple assets at once!
+		Crafty.audio.add('pain','audio/oww.m4a');
+		Crafty.audio.add('swoosh', 'audio/swoosh.m4a');
+		Crafty.audio.add('end', 'audio/noo.m4a');
+
 		Crafty.sprite(48, 'imgs/brandon.png', {
 			PlayerSprite:[0, 0]
 		});
@@ -294,6 +300,7 @@
 					if (Crafty.s('Keyboard').isKeyDown('SPACE')) {
 						k = true;
 						this.attacking = true;
+						Crafty.audio.play('swoosh');
 						if(state == 'PlayerIdle'){
 							state = 'PlayerWeaponSelect';
 						}
@@ -320,6 +327,7 @@
 				
 					if(this.beingHit) {
 						state = 'PlayerHitUp';
+						Crafty.audio.play('pain');
 						this.hitbox.health -= 0.2;
 						if(this.hitbox.health < 0) {
 							Crafty.enterScene('GameOver'); // player dead - game over
@@ -344,6 +352,7 @@
 
 		 	this.gameOver = function() {
 				Crafty.init(dimensions * this.tile, dimensions * this.tile, document.getElementById('game'));
+				Crafty.audio.play('end');
 		 		Crafty.e('2D, Canvas, Image').image('imgs/game_over.png').attr({w: 600, h: 600})
 		 		 .bind('KeyDown', function(e) {
 				    if (e.key == Crafty.keys.ENTER) {
