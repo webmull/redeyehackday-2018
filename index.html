@@ -73,14 +73,25 @@
 		        this.reel('SlimeAttackSide',500, 0, 6, 3);
 		        this.reel('SlimeAttackUp',500, 0, 7, 3);
 		     	this.hitbox = Crafty.e('2D, Canvas, Color, Collision, SlimeHitArea').attr({health:100, parent: this});
+		        this.slimeListenArea = Crafty.e('2D, Canvas, Color, Collision, SlimeListenArea, WiredHitBox').attr({health:100, parent: this});
+
 		        this.state = 'SlimeIdle';
 				this.animate(this.state, -1);
 		        this.w = 16;
 		        this.h = 16;
 		        this.collide = false;
-	       
+		        this.chasing = false;
+		        this.enemyspeed = Math.floor(Math.random() * 60) + 1;
+		        this.dir = ['LEFT', 'RIGHT', 'UP', 'DOWN'];
+		        this.movementState = this.dir[Math.floor(Math.random() * this.dir.length) + 0];
+
+		        this.slimeListenArea.onHit('Player', function() {
+	        		this.chasing = true;
+	        	}.bind(this));
+
 		        this.bind('Move', function(evt) {
 		        	this.hitbox.attr({x: (this.x + this.w / 2) - 3, y: (this.y + this.h / 2) - 3, w: 5, h: 6});
+		        	this.slimeListenArea.attr({x: ((this.x - 40) + this.w / 2), y: ((this.y - 40) + this.h / 2), w: 80, h: 80});
 
 		  			if(this.collide == false) {
 		  				return false;
@@ -88,12 +99,16 @@
 		        	// stops Slime going through level
 		        	if(this.x < 0) {
 		        		this.x = 1;
+		        		this.movementState = 'LEFT';
 		        	} else if(this.x > (this.game.tile * dimensions) - this.w) {
 		        		this.x = this.game.tile * dimensions - this.w;
+		        		this.movementState = 'RIGHT';
 		        	} else if(this.y < 0) {
 		        		this.y = 1;
+		        		this.movementState = 'DOWN';
 		        	} else if(this.y > (this.game.tile * dimensions) - this.h) {
 		        		this.y = this.game.tile * dimensions - this.h;
+		        		this.movementState = 'UP';
 		        	}
 
 					var wallCollisions = this.hitbox.hit('Wall');
@@ -104,6 +119,16 @@
 
 	    				this.hitbox.x -= wallCollisionData.overlap * wallCollisionData.nx;
 	    				this.hitbox.y -= wallCollisionData.overlap * wallCollisionData.ny;
+	    				
+	    				if(this.movementState == 'LEFT') {
+	    					this.movementState = 'RIGHT';
+	    				} else if(this.movementState == 'RIGHT') {
+	    					this.movementState = 'LEFT';
+	    				} else if(this.movementState == 'UP') {
+	    					this.movementState = 'DOWN';
+	    				} else if(this.movementState == 'DOWN') {
+	    					this.movementState = 'UP';
+	    				}
 	    			}
 				});
 
@@ -112,17 +137,27 @@
 					var toPlayerX = Crafty('Player').x - this.x;
 					var toPlayerY = Crafty('Player').y - this.y;
 
-					if(Math.abs(toPlayerX) > 1 ||  Math.abs(toPlayerY) > 1) {
-						// Normalize
-						var toPlayerLength = Math.sqrt(toPlayerX * toPlayerX + toPlayerY * toPlayerY);
-						toPlayerX = toPlayerX / toPlayerLength;
-						toPlayerY = toPlayerY / toPlayerLength;
-						// Move towards the player
-						var d = Math.floor(Math.random() * 60) + 1;
-						this.x += toPlayerX * (eventData.dt / 1000) *  d;
-						this.y += toPlayerY * (eventData.dt / 1000) *  d;
+					if(this.chasing == false) {
+						if(this.movementState == 'UP') {
+							this.y -= 0.5 * (eventData.dt / 1000) * this.enemyspeed;
+						} else if(this.movementState == 'DOWN') {
+							this.y += 0.5 * (eventData.dt / 1000) * this.enemyspeed;
+						} else if(this.movementState == 'LEFT') {
+							this.x -= 0.5 * (eventData.dt / 1000) * this.enemyspeed;
+						} else if (this.movementState == 'RIGHT') {
+							this.x += 0.5 * (eventData.dt / 1000) * this.enemyspeed;
+						}
 					} else {
-						state = 'SlimeAttackUp'
+						if(Math.abs(toPlayerX) > 0 ||  Math.abs(toPlayerY) > 0) {
+							// Normalize
+							var toPlayerLength = Math.sqrt(toPlayerX * toPlayerX + toPlayerY * toPlayerY);
+							toPlayerX = toPlayerX / toPlayerLength;
+							toPlayerY = toPlayerY / toPlayerLength;
+							this.x += toPlayerX * (eventData.dt / 1000) * this.enemyspeed;
+							this.y += toPlayerY * (eventData.dt / 1000) *  this.enemyspeed;
+						} else {
+							state = 'SlimeAttackUp'
+						}
 					}
 
 					if(this.state != state) {
@@ -265,7 +300,7 @@
 				
 					if(this.beingHit) {
 						state = 'PlayerHitUp';
-						this.hitbox.health -= 1;
+						this.hitbox.health -= 0.2;
 						if(this.hitbox.health < 0) {
 							Crafty.enterScene('GameOver'); // player dead - game over
 						}
@@ -299,9 +334,9 @@
 			this.placeEnemies = function() {
 				var placed = false;
 				this.getMap(function(x,y,value, type) {
-					var rx = Math.floor(Math.random() * 32) + 10;
-					var ry = Math.floor(Math.random() * 32) + 10;
-					var number = 4;
+					var rx = Math.floor(Math.random() * 20) + 8;
+					var ry = Math.floor(Math.random() * 20) + 8;
+					var number = 8;
 
 					if(value == 0 && placed < number) {
 						if(x >= rx && y >= ry) {
