@@ -17,33 +17,100 @@
 <body>
 	<div id="game"></div>
 	<script type="text/javascript">
+		var dimensions = 20;
+
+		Crafty.c('Player', {
+		    // This function will be called when the component is added to an entity
+		    // So it sets up the things that both our entities had in common
+		    init: function() {
+		        this.addComponent('2D, Canvas, Color, Fourway, Collision, Keyboard');
+		  		this.color('ff0');
+		        this.fourway(100)
+		        this.w = 8;
+		        this.h = 8;
+		        this.game = null;
+
+		        this.bind('Move', function(evt) {
+					var wallCollisions = this.hit('Wall');
+					if(wallCollisions) {
+					    var wallCollisionData = wallCollisions[0];
+				  		this.x -= wallCollisionData.overlap * wallCollisionData.nx;
+	    				this.y -= wallCollisionData.overlap * wallCollisionData.ny;
+	    			}
+	    			var endCollisions = this.hit('EndPoint');
+					if(endCollisions) {
+						Crafty.enterScene('GameStart');
+	    			}
+				});
+		    },
+		});
+
+
 		 var game = new function() {
 		 	this.tile = 20;
+		 	this.map = [];
 
 		 	// scenes
 		 	this.gameStart = function() {
 				Crafty.init(dimensions * this.tile, dimensions * this.tile, document.getElementById('game'));
+				
 				this.renderMap();
-
-
-				//Crafty.e('2D, Canvas, Color').attr({x: 0, y: 0, w: this.tile, h: this.tile}).color('#f90');
-
+				this.placeStartPoint();
+				this.placeEndPoint();
 			},
 
+			this.placeStartPoint = function() {
+				var placed = false;
+				this.getMap(function(x,y,value, type) {
+					var rx = Math.floor(Math.random() * 6) + 1;
+					var ry = Math.floor(Math.random() * 6) + 1;
+
+					if(value == 0 && placed == false) {
+						if(x >= rx && y >= ry) {
+							placed = true;
+							Crafty.e('2D, Canvas, Color').attr({x: x * this.tile, y: y * this.tile, w: this.tile, h: this.tile}).color('#0f0');
+							var player = Crafty.e('Player').attr({x: x * this.tile, y: y * this.tile});
+							player.game = this;
+						}
+					}
+				}.bind(this));
+			}
+
+			this.placeEndPoint = function() {
+				var placed = false;
+				this.getMap(function(x,y,value, type) {
+					var rx = Math.floor(Math.random() * this.tile) + (this.tile / 3);
+					var ry = Math.floor(Math.random() * this.tile) + (this.tile / 2);
+
+					if(value == 0 && placed == false) {
+						if(x >= rx && y >= ry) {
+							placed = true;
+							Crafty.e('2D, Canvas, Color, Collision, EndPoint').attr({x: x * this.tile, y: y * this.tile, w: this.tile, h: this.tile}).color('#f00');
+						}
+					}
+				}.bind(this));
+			}
+
+
 			this.renderMap = function() {
-				createMap();
+				this.map = createMap();
+				console.log(this.map);
 				this.getMap(function(x,y,value, type) {
 					if(value == 1) {
-						Crafty.e('2D, Canvas, Color').attr({x: x * this.tile, y: y * this.tile, w: this.tile, h: this.tile}).color('#f90');
+						if(type == 'all') {
+							Crafty.e('2D, Canvas, Color').attr({x: x * this.tile, y: y * this.tile, w: this.tile, h: this.tile}).color('#f90');
+						} else {
+							Crafty.e('2D, Canvas, Color, Collision, WiredHitBox, Wall').attr({x: x * this.tile, y: y * this.tile, w: this.tile, h: this.tile}).color('#f90');
+						}
 					}
 				}.bind(this));
 			},
 
 			this.getMap = function(callback) {
-				for(var x = 0; x < map.length; x++) { // row
-					for(var y = 0; y < map.length; y++) { // cols
+				for(var x = 0; x < this.map.length; x++) { // row
+					for(var y = 0; y < this.map.length; y++) { // cols
 						//console.log(map[i][j]);
-						callback(x,y, map[x][y], this.getTileType(x,y));
+						callback(x,y, this.map[x][y], this.getTileType(x,y));
 					}
 				}
 		 	},
@@ -51,22 +118,22 @@
 		 	this.getTileType = function(x,y) {
 		 		var g = '';
 				try {
-					if(map[x-1][y] != 1) // top border
+					if(this.map[x-1][y] != 1) // top border
 						g += 'top';
 				} catch(e) {}
 
 				try {
-					if(map[x][y+1] != 1) // rxght border
+					if(this.map[x][y+1] != 1) // rxght border
 						g += 'right'
 				} catch(e) {}
 
 				try {
-					if(map[x+1][y] != 1) // bottom border
+					if(this.map[x+1][y] != 1) // bottom border
 						g += 'bottom'
 				} catch(e) {}
 
 				try {
-					if(map[x][y-1] != 1) // left border
+					if(this.map[x][y-1] != 1) // left border
 						g += 'left';
 				} catch(e) {}
 
