@@ -3,21 +3,80 @@
 	<script type="text/javascript" src="crafty-min.js"></script>
 	<script type="text/javascript" src="map.js"></script>
 </head>
+  	<style>
+  	body {
+  		background:#000;
+  	}
+  	#game
+	{
+	    display: block;
+	    margin: 50px auto;
+	    background: #cdcdcd;
+	}
+  	</style>
 <body>
 	<div id="game"></div>
 	<script type="text/javascript">
-		 Crafty.init(500, 500, document.getElementById('game'));
-
-		 var game = {
-
-		 	tile: 20,
+		 var game = new function() {
+		 	this.tile = 20;
 
 		 	// scenes
-		 	gameStart: function() {
-      			Crafty.init(dimensions * this.tile, dimensions * this.tile, document.getElementById('game'));
+		 	this.gameStart = function() {
+				Crafty.init(dimensions * this.tile, dimensions * this.tile, document.getElementById('game'));
+				this.renderMap();
+
+
+				//Crafty.e('2D, Canvas, Color').attr({x: 0, y: 0, w: this.tile, h: this.tile}).color('#f90');
+
+			},
+
+			this.renderMap = function() {
+				createMap();
+				this.getMap(function(x,y,value, type) {
+					if(value == 1) {
+						Crafty.e('2D, Canvas, Color').attr({x: x * this.tile, y: y * this.tile, w: this.tile, h: this.tile}).color('#f90');
+					}
+				}.bind(this));
+			},
+
+			this.getMap = function(callback) {
+				for(var x = 0; x < map.length; x++) { // row
+					for(var y = 0; y < map.length; y++) { // cols
+						//console.log(map[i][j]);
+						callback(x,y, map[x][y], this.getTileType(x,y));
+					}
+				}
 		 	},
 
-		 	mainMenu: function() {
+		 	this.getTileType = function(x,y) {
+		 		var g = '';
+				try {
+					if(map[x-1][y] != 1) // top border
+						g += 'top';
+				} catch(e) {}
+
+				try {
+					if(map[x][y+1] != 1) // rxght border
+						g += 'right'
+				} catch(e) {}
+
+				try {
+					if(map[x+1][y] != 1) // bottom border
+						g += 'bottom'
+				} catch(e) {}
+
+				try {
+					if(map[x][y-1] != 1) // left border
+						g += 'left';
+				} catch(e) {}
+
+				if(g == '') {
+					g = 'all'
+				}
+				return g;
+		 	},
+
+		 	this.mainMenu = function() {
 		 		//alert('test');
 				Crafty.background('#000');
 				Crafty.e('2D, DOM, Text')
@@ -27,7 +86,7 @@
 				      .textColor('#FFFFFF');
 		 	},
 
-		 	gameOver: function() {
+		 	this.gameOver = function() {
 				Crafty.background('#000');
 				Crafty.e('2D, DOM, Text')
 				      .attr({ w: 100, h: 20, x: 150, y: 120 })
@@ -37,9 +96,9 @@
 		 	}
 		 }
 	
-		Crafty.defineScene('MainMenu', game.mainMenu);
-		Crafty.defineScene('GameOver', game.gameOver);
-		Crafty.defineScene('GameStart', game.gameStart);
+		Crafty.defineScene('MainMenu', game.mainMenu.bind(game));
+		Crafty.defineScene('GameOver', game.gameOver.bind(game));
+		Crafty.defineScene('GameStart', game.gameStart.bind(game));
 
 		Crafty.enterScene('GameStart');
 
