@@ -118,8 +118,9 @@
 						toPlayerX = toPlayerX / toPlayerLength;
 						toPlayerY = toPlayerY / toPlayerLength;
 						// Move towards the player
-						this.x += toPlayerX * (eventData.dt / 1000) * 70;
-						this.y += toPlayerY * (eventData.dt / 1000) * 70;
+						var d = Math.floor(Math.random() * 60) + 1;
+						this.x += toPlayerX * (eventData.dt / 1000) *  d;
+						this.y += toPlayerY * (eventData.dt / 1000) *  d;
 					} else {
 						state = 'SlimeAttackUp'
 					}
@@ -278,6 +279,25 @@
 				this.renderMap();
 				this.placeStartPoint();
 				this.placeEndPoint();
+				this.placeEnemies();
+			},
+
+			this.placeEnemies = function() {
+				var placed = false;
+				this.getMap(function(x,y,value, type) {
+					var rx = Math.floor(Math.random() * 32) + 10;
+					var ry = Math.floor(Math.random() * 32) + 10;
+					var number = 4;
+
+					if(value == 0 && placed < number) {
+						if(x >= rx && y >= ry) {
+							placed++;
+							var slime = Crafty.e('Slime').attr({x: x * this.tile, y: y * this.tile, w: this.tile, h: this.tile});
+							slime.collide = true;
+							slime.game = this;
+						}
+					}
+				}.bind(this));
 			},
 
 			this.placeStartPoint = function() {
@@ -293,10 +313,6 @@
 							var player = Crafty.e('Player').attr({x: x * this.tile, y: y * this.tile});
 							player.collide = true;
 							player.game = this;
-
-							var slime = Crafty.e('Slime').attr({x: x * this.tile, y: y * this.tile, w: this.tile, h: this.tile});
-							slime.collide = true;
-							slime.game = this;
 						}
 					}
 				}.bind(this));
@@ -332,6 +348,8 @@
 								var randomNum2 = Math.floor((Math.random() * 100) + 1);
 								if(randomNum % 2 == 0 && randomNum2 < 20) {
 									var t  = Crafty.e('Torch').attr({x: x * this.tile + 2, y: y * this.tile, w: 16, h: 16});
+
+									// torches could have rotation
 								}
 							}
 						}
