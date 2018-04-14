@@ -17,7 +17,7 @@
 <body>dsa
 	<div id="game"></div>
 	<script type="text/javascript">
-		var dimensions = 30;
+		var dimensions = 32;
 
 		Crafty.sprite(48, 'imgs/brandon.png', {
 			PlayerSprite:[0, 0]
@@ -31,12 +31,27 @@
 			Wall_1:[0, 0]
 		});
 
+		Crafty.sprite(16, 'imgs/torches.png', {
+			FireTorch:[0, 0]
+		});
+
+		Crafty.c('Torch', {
+			// This function will be called when the component is added to an entity
+			// So it sets up the things that both our entities had in common
+			init: function() {
+				this.addComponent('2D, Canvas, Color, Solid, SpriteAnimation, FireTorch');
+				this.reel('FireTorch', 500, 0, 0, 4);
+				this.animate('FireTorch', -1);
+				this.w = 30;
+				this.h = 30;
+			},
+		});
 
 		Crafty.c('Wall', {
 			// This function will be called when the component is added to an entity
 			// So it sets up the things that both our entities had in common
 			init: function() {
-				this.addComponent("2D, Canvas, Color, Collision, Wall, Solid, SpriteAnimation, Wall_1");
+				this.addComponent('2D, Canvas, Color, Collision, Wall, Solid, SpriteAnimation, Wall_1');
 				this.reel('Wall_1',500, 0, 0, 3);
 				this.w = 30;
 				this.h = 30;
@@ -304,12 +319,21 @@
 
 			this.renderMap = function() {
 				this.map = createMap();
+				var torchplaced = false;
 				this.getMap(function(x,y,value, type) {
 					if(value == 1) {
 						if(type == 'all') {
 							Crafty.e('2D, Canvas, Color').attr({x: x * this.tile, y: y * this.tile, w: this.tile, h: this.tile}).color('#000');
 						} else {
 							Crafty.e('Wall').attr({x: x * this.tile, y: y * this.tile, w: this.tile, h: this.tile}).color('#f90');
+
+							if(type != 'topbottom' && type != 'left' && type != 'toprightbottomleft') {
+								var randomNum = Math.floor((Math.random() * 100) + 1);
+								var randomNum2 = Math.floor((Math.random() * 100) + 1);
+								if(randomNum % 2 == 0 && randomNum2 < 20) {
+									var t  = Crafty.e('Torch').attr({x: x * this.tile + 2, y: y * this.tile, w: 16, h: 16});
+								}
+							}
 						}
 					}
 				}.bind(this));

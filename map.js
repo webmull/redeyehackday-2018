@@ -12,7 +12,7 @@
 
       // lets create a randomly generated map for our dungeon crawler
     function createMap () {
-      var dimensions = 30, // width and height of the map
+      var dimensions = 32, // width and height of the map
         maxTunnels = 100, // max number of tunnels possible
         maxLength = 8, // max length each tunnel can have
         map = createArray(1, dimensions), // create a 2d array full of 1's
