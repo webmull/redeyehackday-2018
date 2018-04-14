@@ -57,14 +57,13 @@
 		        this.reel('SlimeAttackDown',500, 0, 5, 3);
 		        this.reel('SlimeAttackSide',500, 0, 6, 3);
 		        this.reel('SlimeAttackUp',500, 0, 7, 3);
-		     	this.hitbox = Crafty.e('2D, Canvas, Color, Collision, SlimeHitArea');
+		     	this.hitbox = Crafty.e('2D, Canvas, Color, Collision, SlimeHitArea').attr({health:100, parent: this});
 		        this.state = 'SlimeIdle';
 				this.animate(this.state, -1);
 		        this.w = 16;
 		        this.h = 16;
-		        this.game = null;
 		        this.collide = false;
-		       
+	       
 		        this.bind('Move', function(evt) {
 		        	this.hitbox.attr({x: (this.x + this.w / 2) - 3, y: (this.y + this.h / 2) - 3, w: 5, h: 6});
 
@@ -94,8 +93,7 @@
 				});
 
 				this.bind('UpdateFrame', function(eventData) {
-
-
+					var state = 'SlimeIdle';
 					var toPlayerX = Crafty('Player').x - this.x;
 					var toPlayerY = Crafty('Player').y - this.y;
 
@@ -107,9 +105,20 @@
 						// Move towards the player
 						this.x += toPlayerX * (eventData.dt / 1000) * 70;
 						this.y += toPlayerY * (eventData.dt / 1000) * 70;
+					} else {
+						state = 'SlimeAttackUp'
 					}
+
+					if(this.state != state) {
+				    	this.state = state;
+			    		this.animate(state, -1);
+			    	}
 				});
 		    },
+
+		    health: function() {
+		    	console.log('health');
+		    }
 		});
 
 		Crafty.c('Player', {
@@ -125,10 +134,9 @@
 		        this.reel('PlayerAttackDown',500, 0, 5, 3);
 		        this.reel('PlayerAttackSide',500, 0, 6, 3);
 		        this.reel('PlayerAttackUp',500, 0, 7, 3);
-		     	this.hitbox = Crafty.e('2D, Canvas, Color, Collision, PlayerHitArea');
+		     	this.hitbox = Crafty.e('2D, Canvas, Color, Collision, PlayerHitArea').attr({health:100});
 		        this.state = 'PlayerIdle';
 				this.animate(this.state, -1);
-
 		        this.fourway(100)
 		        this.w = 16;
 		        this.h = 16;
@@ -160,8 +168,6 @@
 		        		this.y = this.game.tile * dimensions - this.h;
 		        	}
 
-		        	//console.log(this.tile * dimensions)
-
 					var wallCollisions = this.hitbox.hit('Wall');
 					var endCollisions = this.hitbox.hit('EndPoint');
 					if(wallCollisions) {
@@ -174,12 +180,26 @@
 	    			} else if(endCollisions) {
 						Crafty.enterScene('GameStart');
 	    			}
+
+	    			var slimeCollisions = this.hitbox.hit('SlimeHitArea');
+
+	    			if(slimeCollisions) {
+		    			for(var j = 0; j < slimeCollisions.length; j++) {
+		    				if(this.attacking) {
+		    					slimeCollisions[j].obj.health -= 1.8;
+		    					if(slimeCollisions[j].obj.health <= 0) {
+		    						slimeCollisions[j].obj.parent.destroy();
+		    					}
+		    				}
+		    			}
+	    			}
 				});
 
 				this.bind('UpdateFrame', function() {
 	
 					var k = false;
 					var state = 'PlayerIdle';
+					this.attacking = false;
 					if (Crafty.s('Keyboard').isKeyDown('A')||Crafty.s('Keyboard').isKeyDown('LEFT_ARROW')) {
 						k = true;
 						state = 'PlayerSide';
@@ -203,6 +223,7 @@
 
 					if (Crafty.s('Keyboard').isKeyDown('SPACE')) {
 						k = true;
+						this.attacking = true;
 						if(state == 'PlayerIdle'){
 							state = 'PlayerWeaponSelect';
 						}
@@ -228,26 +249,6 @@
 			    		this.animate('PlayerIdle', -1);
 			    	}
 
-					/*
-				  	if (Crafty.s('Keyboard').isKeyDown('C')) {
-				 
-				  		if(this.camera) {
-							Crafty.viewport.clampToEntities = false;
-		      	 	 		Crafty.viewport.bounds = {min:{x:0, y:0}, max:{x:20, y:20}};
-		      	 	 		Crafty.viewport.clampToEntities = false;
-							Crafty.viewport.follow(this);
-							Crafty.viewport.scale(8);
-						} else {
-							Crafty.viewport.scale(0);
-						}
-					}
-
-					*/
-
-				});
-
-				this.bind('KeyUp', function(e) {
-					   this.camera = !this.camera;
 				});
 		    },
 		});
