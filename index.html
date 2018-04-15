@@ -94,7 +94,7 @@
 		        this.reel('SlimeAttackSide',500, 0, 6, 3);
 		        this.reel('SlimeAttackUp',500, 0, 7, 3);
 		     	this.hitbox = Crafty.e('2D, Canvas, Color, Collision, SlimeHitArea').attr({health:100, parent: this});
-		        this.slimeListenArea = Crafty.e('2D, Canvas, Color, Collision, SlimeListenArea, WiredHitBox').attr({health:100, parent: this});
+		        this.slimeListenArea = Crafty.e('2D, Canvas, Color, Collision, SlimeListenArea').attr({parent: this});
 
 		        this.state = 'SlimeIdle';
 				this.animate(this.state, -1);
@@ -111,8 +111,8 @@
 	        	}.bind(this));
 
 		        this.bind('Move', function(evt) {
-		        	this.hitbox.attr({x: (this.x + this.w / 2) - 3, y: (this.y + this.h / 2) - 3, w: 5, h: 6});
-		        	this.slimeListenArea.attr({x: ((this.x - 40) + this.w / 2), y: ((this.y - 40) + this.h / 2), w: 80, h: 80});
+		        	this.hitbox.attr({x: (this.x + this.w / 2) - 8, y: (this.y + this.h / 2) - 3, w: 10, h: 10});
+		        	this.slimeListenArea.attr({x: ((this.x - 50) + this.w / 2), y: ((this.y - 50) + this.h / 2), w: 80, h: 80});
 
 		  			if(this.collide == false) {
 		  				return false;
@@ -186,8 +186,6 @@
 							var ddx = Crafty('Player').x - this.x - 5;
 							var ddy = Math.abs(Crafty('Player').y - this.y - 5);
 
-							console.log(ddy);
-
 							if(ddy > 5) {
 								if(toPlayerY < toPlayerX) {
 									state = 'SlimeAttackUp';
@@ -202,7 +200,6 @@
 									this.flip('X');
 								}
 							}
-
 
 							this.x += toPlayerX * (eventData.dt / 1000) * this.enemyspeed;
 							this.y += toPlayerY * (eventData.dt / 1000) *  this.enemyspeed;
@@ -253,15 +250,10 @@
 		        Crafty.viewport.clampToEntities = true;
   	 	 		Crafty.viewport.bounds = {min:{x:0, y:0}};
   	 	 		Crafty.viewport.clampToEntities = false;
-				//Crafty.viewport.follow(this);
-				//Crafty.viewport.scale(8);
-
-
-
+				Crafty.viewport.follow(this);
+				Crafty.viewport.scale(8);
 
 		        this.bind('Move', function(evt) {
-
-		        	this.beingHit = false;
 		        	this.hitbox.attr({x: (this.x + this.w / 2) - 3, y: (this.y + this.h / 2) - 3, w: 5, h: 6});
 
 		        	if(this.collide == false) {
@@ -305,7 +297,15 @@
 		    					}
 		    				}
 		    			}
+	    			} else {
+	    				this.beingHit = false;
 	    			}
+				});
+
+		        this.bind('KeyDown', function(e) {
+					if (e.key == Crafty.keys.SPACE) {
+						Crafty.audio.play('swoosh');
+					}
 				});
 
 				this.bind('UpdateFrame', function() {
@@ -336,7 +336,6 @@
 					if (Crafty.s('Keyboard').isKeyDown('SPACE')) {
 						k = true;
 						this.attacking = true;
-						Crafty.audio.play('swoosh');
 						if(state == 'PlayerIdle'){
 							state = 'PlayerWeaponSelect';
 						}
@@ -431,7 +430,7 @@
 				this.getMap(function(x,y,value, type) {
 					var rx = Math.floor(Math.random() * 20) + 8;
 					var ry = Math.floor(Math.random() * 20) + 8;
-					var number = 1;
+					var number = 4;
 
 					if(value == 0 && placed < number) {
 						if(x >= rx && y >= ry) {
