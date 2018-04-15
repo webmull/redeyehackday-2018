@@ -21,9 +21,11 @@
 
 		// Here we're just loading a single sound, and calling it "beep".
 // But you can load multiple assets at once!
-		Crafty.audio.add('pain','audio/oww.m4a');
+		Crafty.audio.add('pain','audio/Pain.m4a');
 		Crafty.audio.add('swoosh', 'audio/swoosh.m4a');
-		Crafty.audio.add('end', 'audio/noo.m4a');
+		Crafty.audio.add('die', 'audio/Nooo.m4a');
+		Crafty.audio.add('start', 'audio/beardoil.m4a');
+		Crafty.audio.add('end', 'audio/woo.m4a');
 
 		Crafty.sprite(48, 'imgs/brandon.png', {
 			PlayerSprite:[0, 0]
@@ -450,7 +452,7 @@
 				Crafty.init(dimensions * this.tile, dimensions * this.tile, document.getElementById('game'));
 
 				setTimeout(function() {
-					Crafty.audio.play('end');
+					Crafty.audio.play('die');
 				}, 2000);
 
 		 		Crafty.e('2D, Canvas, Image').image('imgs/game_over.png').attr({w: 600, h: 600})
