@@ -280,8 +280,8 @@
 		        Crafty.viewport.clampToEntities = true;
   	 	 		Crafty.viewport.bounds = {min:{x:0, y:0}};
   	 	 		Crafty.viewport.clampToEntities = false;
-			//	Crafty.viewport.follow(this);
-			//	Crafty.viewport.scale(4);
+				Crafty.viewport.follow(this);
+				Crafty.viewport.scale(8);
 
 		        this.bind('Move', function(evt) {
 		        	this.hitbox.attr({x: (this.x + this.w / 2) - 3, y: (this.y + this.h / 2) - 3, w: 5, h: 6});
@@ -312,7 +312,7 @@
 	    				this.hitbox.y -= wallCollisionData.overlap * wallCollisionData.ny;
 	    			} else if(endCollisions) {
 						Crafty.enterScene('GameStart');
-						this.level += 1;d 
+						this.level += 1;
 	    			}
 
 	    			var doorCollision = this.hitbox.hit('Door');
