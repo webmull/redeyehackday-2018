@@ -21,11 +21,11 @@
 
 		// Here we're just loading a single sound, and calling it "beep".
 // But you can load multiple assets at once!
-		Crafty.audio.add('pain','audio/Pain.m4a');
-		Crafty.audio.add('swoosh', 'audio/swoosh.m4a');
-		Crafty.audio.add('die', 'audio/Nooo.m4a');
-		Crafty.audio.add('start', 'audio/beardoil.m4a');
-		Crafty.audio.add('end', 'audio/woo.m4a');
+		Crafty.audio.add('pain','audio/Pain.mp3');
+		Crafty.audio.add('swoosh', 'audio/swoosh.mp3');
+		Crafty.audio.add('die', 'audio/Nooo.mp3');
+		Crafty.audio.add('start', 'audio/beardoil.mp3');
+		Crafty.audio.add('end', 'audio/woo.mp3');
 
 		Crafty.sprite(48, 'imgs/brandon.png', {
 			PlayerSprite:[0, 0]
@@ -281,8 +281,8 @@
 		        Crafty.viewport.clampToEntities = true;
   	 	 		Crafty.viewport.bounds = {min:{x:0, y:0}};
   	 	 		Crafty.viewport.clampToEntities = false;
-				Crafty.viewport.follow(this);
-				Crafty.viewport.scale(4);
+				//Crafty.viewport.follow(this);
+				//Crafty.viewport.scale(0);
 
 		        this.bind('Move', function(evt) {
 		        	this.hitbox.attr({x: (this.x + this.w / 2) - 3, y: (this.y + this.h / 2) - 3, w: 5, h: 6});
