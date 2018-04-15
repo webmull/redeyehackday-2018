@@ -288,6 +288,29 @@
 				Crafty.viewport.follow(this);
 				Crafty.viewport.scale(4);
 
+				this.hitbox.onHit('SlimeHitArea', function(slimeCollisions) {
+					this.beingHit = true;
+
+					for(var j = 0; j < slimeCollisions.length; j++) {
+	    				if(this.attacking) {
+	    					slimeCollisions[j].obj.health -= 1.8;
+	    					if(slimeCollisions[j].obj.health <= 0) {
+	    						slimeCollisions[j].obj.parent.destroy();
+	    					}
+	    				}
+
+	    				if(slimeCollisions[j].obj.health > 0) {
+	    					this.beingHit = true;
+	    				}
+	    			}
+	    		
+	    			setTimeout(function() {
+	    				this.beingHit = false;
+	    			}.bind(this), 2000)
+	    			
+					this.hitbox.resetHitChecks();
+				}.bind(this));
+
 		        this.bind('Move', function(evt) {
 		        	this.hitbox.attr({x: (this.x + this.w / 2) - 3, y: (this.y + this.h / 2) - 3, w: 5, h: 6});
 		        	
@@ -347,25 +370,6 @@
 		    					this.ckdoor = 0;
 	    					}
 	    				}
-	    			}
-
-	    			var slimeCollisions = this.hitbox.hit('SlimeHitArea');
-
-	    			if(slimeCollisions) {
-		    			for(var j = 0; j < slimeCollisions.length; j++) {
-		    				if(this.attacking) {
-		    					slimeCollisions[j].obj.health -= 1.8;
-		    					if(slimeCollisions[j].obj.health <= 0) {
-		    						slimeCollisions[j].obj.parent.destroy();
-		    					}
-		    				}
-
-		    				if(slimeCollisions[j].obj.health > 0) {
-		    					this.beingHit = true;
-		    				}
-		    			}
-	    			} else {
-	    				this.beingHit = false;
 	    			}
 				});
 
@@ -434,7 +438,9 @@
 					}
 
 					if(this.beingHit) {
-						state = 'PlayerHitUp';
+						if(!this.attacking)
+							state = 'PlayerHitUp';
+
 						Crafty.audio.play('pain');
 						this.hitbox.health -= 0.2;
 						if(this.hitbox.health < 0) {
