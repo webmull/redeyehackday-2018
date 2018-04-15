@@ -42,6 +42,10 @@
 			Wall_1:[0, 0]
 		});
 
+		Crafty.sprite(16, 'imgs/blank.png', {
+			InnerWall:[0, 0]
+		});
+
 		Crafty.sprite(16, 'imgs/torches.png', {
 			FireTorch:[0, 0]
 		});
@@ -62,12 +66,21 @@
 			},
 		});
 
+		Crafty.c('CellBlank', {
+			// This function will be called when the component is added to an entity
+			// So it sets up the things that both our entities had in common
+			init: function() {
+				this.addComponent('2D, Canvas, Color, Collision, InnerWall');
+				this.w = 16;
+				this.h = 16;
+			},
+		});
+
 		Crafty.c('Wall', {
 			// This function will be called when the component is added to an entity
 			// So it sets up the things that both our entities had in common
 			init: function() {
-				this.addComponent('2D, Canvas, Color, Collision, Wall, Solid, SpriteAnimation, Wall_1');
-				this.reel('Wall_1',500, 0, 0, 3);
+				this.addComponent('2D, Canvas, Color, Collision, Solid, Wall_1');
 				this.w = 16;
 				this.h = 16;
 			},
@@ -599,7 +612,8 @@
 				this.getMap(function(x,y,value, type) {
 					if(value == 1) {
 						if(type == 'all') {
-							Crafty.e('2D, Canvas, Color').attr({x: x * this.tile, y: y * this.tile, w: this.tile, h: this.tile}).color('#000');
+							//Crafty.e('2D, Canvas, Color').attr({x: x * this.tile, y: y * this.tile, w: this.tile, h: this.tile}).color('#000');
+							Crafty.e('CellBlank').attr({x: x * this.tile, y: y * this.tile, w: this.tile, h: this.tile}).color('#f90')
 						} else {
 							Crafty.e('Wall').attr({x: x * this.tile, y: y * this.tile, w: this.tile, h: this.tile}).color('#f90');
 
