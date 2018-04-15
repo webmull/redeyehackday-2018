@@ -79,6 +79,7 @@
 				this.w = 16;
 				this.h = 16;
 				this.doorState = 'CLOSED';
+				this.originaly = this.y;
 			},
 		});
 
@@ -332,9 +333,11 @@
 		    					if(doorCollision.obj.doorState == 'OPEN') {
 									doorCollision.obj.doorState = 'CLOSED';
 		    						doorCollision.obj.rotation = 90;
+		    						doorCollision.obj.y -= 5;
 		    					} else {
 									doorCollision.obj.doorState = 'OPEN';
 		    						doorCollision.obj.rotation = 0;
+		    						doorCollision.obj.y = doorCollision.obj.originaly;
 		    					}
 		    					this.ckdoor = 0;
 	    					}
@@ -571,7 +574,7 @@
 							var randomNum2 = Math.floor((Math.random() * 100) + 1);
 							if(randomNum > 30 && randomNum2 < 40) {
 								var d = Crafty.e('Door').attr({w: 16, h: 16, x: x * this.tile, y: y * this.tile });
-								//d.rotation = 180;
+								d.originaly = y * this.tile;
 							}
 						//	this.rotation = 45;
 						}
