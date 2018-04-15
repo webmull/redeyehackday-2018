@@ -186,8 +186,6 @@
 							var ddx = Crafty('Player').x - this.x - 5;
 							var ddy = Math.abs(Crafty('Player').y - this.y - 5);
 
-							console.log(ddy);
-
 							if(ddy > 5) {
 								if(toPlayerY < toPlayerX) {
 									state = 'SlimeAttackUp';
@@ -257,8 +255,6 @@
 				Crafty.viewport.scale(8);
 
 		        this.bind('Move', function(evt) {
-
-		        	this.beingHit = false;
 		        	this.hitbox.attr({x: (this.x + this.w / 2) - 3, y: (this.y + this.h / 2) - 3, w: 5, h: 6});
 
 		        	if(this.collide == false) {
@@ -302,6 +298,8 @@
 		    					}
 		    				}
 		    			}
+	    			} else {
+	    				this.beingHit = false;
 	    			}
 				});
 
