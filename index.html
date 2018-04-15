@@ -24,8 +24,9 @@
 		Crafty.audio.add('pain','audio/Pain.mp3');
 		Crafty.audio.add('swoosh', 'audio/swoosh.mp3');
 		Crafty.audio.add('die', 'audio/Nooo.mp3');
-		Crafty.audio.add('start', 'audio/beardoil.mp3');
+		Crafty.audio.add('start', 'audio/beardoil_new.mp3');
 		Crafty.audio.add('end', 'audio/woo.mp3');
+		Crafty.audio.add('door', 'audio/door_lock.mp3');
 
 		Crafty.sprite(48, 'imgs/brandon.png', {
 			PlayerSprite:[0, 0]
@@ -281,8 +282,8 @@
 		        Crafty.viewport.clampToEntities = true;
   	 	 		Crafty.viewport.bounds = {min:{x:0, y:0}};
   	 	 		Crafty.viewport.clampToEntities = false;
-				//Crafty.viewport.follow(this);
-				//Crafty.viewport.scale(0);
+				Crafty.viewport.follow(this);
+				Crafty.viewport.scale(4);
 
 		        this.bind('Move', function(evt) {
 		        	this.hitbox.attr({x: (this.x + this.w / 2) - 3, y: (this.y + this.h / 2) - 3, w: 5, h: 6});
@@ -339,6 +340,7 @@
 		    						doorCollision.obj.rotation = 0;
 		    						doorCollision.obj.y = doorCollision.obj.originaly;
 		    					}
+		    					Crafty.audio.play('door');
 		    					this.ckdoor = 0;
 	    					}
 	    				}
@@ -489,6 +491,7 @@
 				this.placeEndPoint();
 				this.placeEnemies();
 				this.level += 1;
+				Crafty.audio.play('start');
 			},
 
 			this.placeEnemies = function() {
