@@ -391,7 +391,11 @@
 		 	this.gameOver = function() {
 		 		this.level = 0;
 				Crafty.init(dimensions * this.tile, dimensions * this.tile, document.getElementById('game'));
-				Crafty.audio.play('end');
+
+				setTimeout(function() {
+					Crafty.audio.play('end');
+				}, 2000);
+
 		 		Crafty.e('2D, Canvas, Image').image('imgs/game_over.png').attr({w: 600, h: 600})
 		 		 .bind('KeyDown', function(e) {
 				    if (e.key == Crafty.keys.ENTER) {
@@ -399,16 +403,16 @@
 				    }
 				  });
 
-		 		 Crafty.e('2D, Canvas, Image').image('imgs/angel.png').attr({w: 299, h: 299, x: 150, dir: 'down'}).bind('UpdateFrame', function(eventData) {
+		 		 Crafty.e('2D, Canvas, Image').image('imgs/angel.png').attr({w: 299, h: 299, x: 30, y: -70, dir: 'down'}).bind('UpdateFrame', function(eventData) {
 
 		 		 	if(this.dir == 'down') {
 		 		 		this.y += 15 * (eventData.dt / 500);
-		 		 		if(this.y > 100) {
+		 		 		if(this.y > 10) {
 		 		 		  this.dir = 'up';
 			 		 	}
 		 		 	} else if(this.dir == 'up') {
 		 		 		this.y -= 15 * (eventData.dt / 500);
-		 		 		if(this.y < 10) {
+		 		 		if(this.y < -70) {
 		 		 			this.dir = 'down';
 		 		 		}
 		 		 	}
@@ -563,7 +567,7 @@
 		Crafty.defineScene('MainMenu', game.mainMenu.bind(game));
 		Crafty.defineScene('GameOver', game.gameOver.bind(game));
 		Crafty.defineScene('GameStart', game.gameStart.bind(game));
-		Crafty.enterScene('MainMenu');
+		Crafty.enterScene('GameStart');
 	</script>
 </body>
 </html>
