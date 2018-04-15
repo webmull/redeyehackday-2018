@@ -290,13 +290,16 @@
 	    			var slimeCollisions = this.hitbox.hit('SlimeHitArea');
 
 	    			if(slimeCollisions) {
-	    				this.beingHit = true;
 		    			for(var j = 0; j < slimeCollisions.length; j++) {
 		    				if(this.attacking) {
 		    					slimeCollisions[j].obj.health -= 1.8;
 		    					if(slimeCollisions[j].obj.health <= 0) {
-		    						slimeCollisions[j].obj.parent.destrdsaoy();
+		    						slimeCollisions[j].obj.parent.destroy();
 		    					}
+		    				}
+
+		    				if(slimeCollisions[j].obj.health > 0) {
+		    					this.beingHit = true;
 		    				}
 		    			}
 	    			} else {
