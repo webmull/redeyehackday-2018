@@ -236,7 +236,9 @@
 		        this.reel('PlayerHitUp',500, 0, 8, 3);
                 this.reel('PlayerHitSide',500, 0, 9, 3);
                 this.reel('PlayerHitDown',500, 0, 10, 3);
-		     	this.hitbox = Crafty.e('2D, Canvas, Color, Collision, PlayerHitArea').attr({health:12100});
+		     	this.hitbox = Crafty.e('2D, Canvas, Color, Collision, PlayerHitArea').attr({health:100});
+		     	this.healthText = Crafty.e('2D, DOM, Text').attr({x: 0, y: 0}).text('Adam').textColor('red').textFont({ size: '6px', weight: 'bold' });
+
 		        this.state = 'PlayerIdle';
 				this.animate(this.state, -1);
 		        this.fourway(100)
@@ -254,7 +256,11 @@
 				Crafty.viewport.scale(8);
 
 		        this.bind('Move', function(evt) {
+
+
+
 		        	this.hitbox.attr({x: (this.x + this.w / 2) - 3, y: (this.y + this.h / 2) - 3, w: 5, h: 6});
+		        	
 
 		        	if(this.collide == false) {
 		        		return;
@@ -309,6 +315,10 @@
 				});
 
 				this.bind('UpdateFrame', function() {
+					if(this.game) {
+						this.healthText.attr({x: this.x, y: this.y + 20}).text('Health:' + this.hitbox.health + '' + 'Score: 0 - '  + 'Level:' + this.game.level);
+		        	}
+
 					var k = false;
 					var state = 'PlayerIdle';
 					this.attacking = false;
@@ -377,8 +387,10 @@
 		 var game = new function() {
 		 	this.tile = 16;
 		 	this.map = [];
+		 	this.level = 0;
 
 		 	this.gameOver = function() {
+		 		this.level = 0;
 				Crafty.init(dimensions * this.tile, dimensions * this.tile, document.getElementById('game'));
 				Crafty.audio.play('end');
 		 		Crafty.e('2D, Canvas, Image').image('imgs/game_over.png').attr({w: 600, h: 600})
@@ -412,18 +424,7 @@
 				this.placeEndPoint();
 				this.placeEnemies();
 				this.level += 1;
-				//this.placeHUD();
 			},
-
-			this.placeHUD = function() {
-				//var health = this.hitbox.health;
-				var healthText = Crafty.e('2D, DOM, Text')
-				.attr({x: 10, y: 10});
-				healthText.text('Health:');
-				var levelText = Crafty.e('2D, DOM, Text')
-				.attr({x: 10, y: 20});
-				levelText.text('Level:');
-			}
 
 			this.placeEnemies = function() {
 				var placed = false;
