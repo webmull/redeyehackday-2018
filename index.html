@@ -17,7 +17,7 @@
 <body>dsa
 	<div id="game"></div>
 	<script type="text/javascript">
-		var dimensions = 30;
+		var dimensions = 24;
 
 		Crafty.sprite(48, 'imgs/brandon.png', {
 			PlayerSprite:[0, 0]
@@ -27,12 +27,16 @@
 			SlimeSprite:[0, 0]
 		});
 
-		Crafty.sprite(30, 'imgs/walls/wall_1.png', {
+		Crafty.sprite(16, 'imgs/walls/wall_1.png', {
 			Wall_1:[0, 0]
 		});
 
 		Crafty.sprite(16, 'imgs/torches.png', {
 			FireTorch:[0, 0]
+		});
+
+		Crafty.sprite(32, 'imgs/doors.png', {
+			Doors:[0, 0]
 		});
 
 		Crafty.c('Torch', {
@@ -42,8 +46,8 @@
 				this.addComponent('2D, Canvas, Color, Solid, SpriteAnimation, FireTorch');
 				this.reel('FireTorch', 500, 0, 0, 4);
 				this.animate('FireTorch', -1);
-				this.w = 30;
-				this.h = 30;
+				this.w = 16;
+				this.h = 16;
 			},
 		});
 
@@ -53,8 +57,19 @@
 			init: function() {
 				this.addComponent('2D, Canvas, Color, Collision, Wall, Solid, SpriteAnimation, Wall_1');
 				this.reel('Wall_1',500, 0, 0, 3);
-				this.w = 30;
-				this.h = 30;
+				this.w = 16;
+				this.h = 16;
+			},
+		});
+
+		Crafty.c('Door', {
+			// This function will be called when the component is added to an entity
+			// So it sets up the things that both our entities had in common
+			init: function() {
+				this.addComponent('2D, Canvas, Color, Collision, Wall, Solid, SpriteAnimation, Doors');
+				this.reel('Doors',500, 0, 0, 1);
+				this.w = 16;
+				this.h = 16;
 			},
 		});
 
@@ -119,7 +134,7 @@
 
 	    				this.hitbox.x -= wallCollisionData.overlap * wallCollisionData.nx;
 	    				this.hitbox.y -= wallCollisionData.overlap * wallCollisionData.ny;
-	    				
+
 	    				if(this.movementState == 'LEFT') {
 	    					this.movementState = 'RIGHT';
 	    					this.state = 'SlimeSide';
@@ -161,6 +176,28 @@
 							var toPlayerLength = Math.sqrt(toPlayerX * toPlayerX + toPlayerY * toPlayerY);
 							toPlayerX = toPlayerX / toPlayerLength;
 							toPlayerY = toPlayerY / toPlayerLength;
+
+							var ddx = Crafty('Player').x - this.x - 5;
+							var ddy = Math.abs(Crafty('Player').y - this.y - 5);
+
+							console.log(ddy);
+
+							if(ddy > 5) {
+								if(toPlayerY < toPlayerX) {
+									state = 'SlimeAttackUp';
+								} else if(toPlayerY > toPlayerX) {
+									state = 'SlimeAttackDown';
+								}
+							} else {
+								state = 'SlimeAttackSide';
+								if(toPlayerX > 0) {
+									this.unflip('X');
+								} else {
+									this.flip('X');
+								}
+							}
+
+
 							this.x += toPlayerX * (eventData.dt / 1000) * this.enemyspeed;
 							this.y += toPlayerY * (eventData.dt / 1000) *  this.enemyspeed;
 						} else {
@@ -196,7 +233,7 @@
 		        this.reel('PlayerHitUp',500, 0, 8, 3);
                 this.reel('PlayerHitSide',500, 0, 9, 3);
                 this.reel('PlayerHitDown',500, 0, 10, 3);
-		     	this.hitbox = Crafty.e('2D, Canvas, Color, Collision, PlayerHitArea').attr({health:100});
+		     	this.hitbox = Crafty.e('2D, Canvas, Color, Collision, PlayerHitArea').attr({health:12100});
 		        this.state = 'PlayerIdle';
 				this.animate(this.state, -1);
 		        this.fourway(100)
@@ -206,9 +243,9 @@
 		        this.camera = false;
 		        this.collide = false;
 		        this.beingHit = false;
-		       
-		        Crafty.viewport.clampToEntities = false;
-  	 	 		Crafty.viewport.bounds = {min:{x:0, y:0}, max:{x:20, y:20}};
+
+		        Crafty.viewport.clampToEntities = true;
+  	 	 		Crafty.viewport.bounds = {min:{x:0, y:0}};
   	 	 		Crafty.viewport.clampToEntities = false;
 				Crafty.viewport.follow(this);
 				Crafty.viewport.scale(8);
@@ -275,11 +312,11 @@
 					    this.unflip('X');
 			  		}
 
-					if (Crafty.s('Keyboard').isKeyDown('W')||Crafty.s('Keyboard').isKeyDown('UP_ARROW')) { 
+					if (Crafty.s('Keyboard').isKeyDown('W')||Crafty.s('Keyboard').isKeyDown('UP_ARROW')) {
 						k = true;
 						state = 'PlayerUp';
 					}
-	
+
 					if (Crafty.s('Keyboard').isKeyDown('S')||Crafty.s('Keyboard').isKeyDown('DOWN_ARROW')) {
 						k = true;
 						state = 'PlayerDown';
@@ -305,7 +342,7 @@
 						}
 					}
 
-				
+
 					if(this.beingHit) {
 						state = 'PlayerHitUp';
 						this.hitbox.health -= 0.2;
@@ -327,7 +364,7 @@
 		});
 
 		 var game = new function() {
-		 	this.tile = 20;
+		 	this.tile = 16;
 		 	this.map = [];
 
 		 	this.gameOver = function() {
@@ -369,7 +406,7 @@
 				this.getMap(function(x,y,value, type) {
 					var rx = Math.floor(Math.random() * 20) + 8;
 					var ry = Math.floor(Math.random() * 20) + 8;
-					var number = 8;
+					var number = 1;
 
 					if(value == 0 && placed < number) {
 						if(x >= rx && y >= ry) {
@@ -391,7 +428,10 @@
 					if(value == 0 && placed == false) {
 						if(x >= rx && y >= ry) {
 							placed = true;
-							Crafty.e('2D, Canvas, Color').attr({x: x * this.tile, y: y * this.tile, w: this.tile, h: this.tile}).color('#0f0');
+							//Crafty.e('2D, Canvas, Color').attr({x: x * this.tile, y: y * this.tile, w: this.tile, h: this.tile}).color('#0f0');
+
+							Crafty.e('2D, Canvas, Image').image('imgs/step_start.png').attr({w: 32, h: 32, x: x * this.tile, y: y * this.tile });
+
 							var player = Crafty.e('Player').attr({x: x * this.tile, y: y * this.tile});
 							player.collide = true;
 							player.game = this;
@@ -409,7 +449,10 @@
 					if(value == 0 && placed == false) {
 						if(x >= rx && y >= ry) {
 							placed = true;
-							Crafty.e('2D, Canvas, Color, Collision, EndPoint').attr({x: x * this.tile, y: y * this.tile, w: this.tile, h: this.tile}).color('#f00');
+							//Crafty.e('2D, Canvas, Color, Collision, EndPoint').attr({x: x * this.tile, y: y * this.tile, w: this.tile, h: this.tile}).color('#f00');
+							//
+
+							Crafty.e('2D, Canvas, Image, Collision, EndPoint').image('imgs/step_finish.png').attr({w: 22, h: 16, x: x * this.tile, y: y * this.tile });
 						}
 					}
 				}.bind(this));
@@ -429,11 +472,17 @@
 								var randomNum = Math.floor((Math.random() * 100) + 1);
 								var randomNum2 = Math.floor((Math.random() * 100) + 1);
 								if(randomNum % 2 == 0 && randomNum2 < 20) {
-									var t  = Crafty.e('Torch').attr({x: x * this.tile + 2, y: y * this.tile, w: 16, h: 16});
+									var t  = Crafty.e('Torch').attr({x: x * this.tile + 5, y: y * this.tile, w: 8, h: 8});
 
 									// torches could have rotation
 								}
 							}
+						}
+					} else {
+						if( type == 'topbottom') {
+							console.log(type);
+						//	Crafty.e('Door').attr({w: 16, h: 16, x: x * this.tile, y: y * this.tile });
+
 						}
 					}
 				}.bind(this));
@@ -486,7 +535,7 @@
 				  });
 		 	}
 		 }
-	
+
 		Crafty.defineScene('MainMenu', game.mainMenu.bind(game));
 		Crafty.defineScene('GameOver', game.gameOver.bind(game));
 		Crafty.defineScene('GameStart', game.gameStart.bind(game));
