@@ -20,20 +20,17 @@
 	<script type="text/javascript">
 		var dimensions = 22;
 
-		// Here we're just loading a single sound, and calling it "beep".
-// But you can load multiple assets at once!
-		Crafty.audio.add('menu','audio/menu.mp3');
-		Crafty.audio.add('pain','audio/Pain.mp3');
-		Crafty.audio.add('swoosh', 'audio/swoosh.mp3');
-		Crafty.audio.add('die', 'audio/Nooo.mp3');
-		Crafty.audio.add('start', 'audio/beardoil_new.mp3');
-		Crafty.audio.add('end', 'audio/woo.mp3');
-		Crafty.audio.add('door', 'audio/door_lock.mp3');
-		Crafty.audio.add('idle1','audio/idle1.mp3');
-		Crafty.audio.add('idle2','audio/Idle3.mp3');
-		Crafty.audio.add('idle3','audio/Idle3.mp3');
-		Crafty.audio.add('aipain','audio/EnemyPain1.mp3');
-		Crafty.audio.add('killsuccess','audio/KillSuccess.mp3');
+		window.onload = function() {
+
+			// Here we're just loading a single sound, and calling it "beep".
+	// But you can load multiple assets at once!
+			Crafty.audio.add('menu','audio/menu.mp3');
+			Crafty.audio.add('pain','audio/Pain.mp3');
+			Crafty.audio.add('swoosh', 'audio/swoosh.mp3');
+			Crafty.audio.add('die', 'audio/Nooo.mp3');
+			Crafty.audio.add('start', 'audio/beardoil_new.mp3');
+			Crafty.audio.add('end', 'audio/woo.mp3');
+			Crafty.audio.add('door', 'audio/door_lock.mp3');
 
 			Crafty.sprite(48, 'imgs/brandon.png', {
 				PlayerSprite:[0, 0]
@@ -510,10 +507,9 @@
 			 	this.level = 0;
 			 	this.score = 0;
 
-		 	this.gameOver = function() {
-		 		this.level = 0;
-		 		this.score = 0;
-				Crafty.init(dimensions * this.tile, dimensions * this.tile, document.getElementById('game'));
+			 	this.gameOver = function() {
+			 		this.level = 0;
+					Crafty.init(dimensions * this.tile, dimensions * this.tile, document.getElementById('game'));
 
 					setTimeout(function() {
 						Crafty.audio.play('die');
