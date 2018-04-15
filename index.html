@@ -20,169 +20,163 @@
 	<script type="text/javascript">
 		var dimensions = 22;
 
-		// Here we're just loading a single sound, and calling it "beep".
-// But you can load multiple assets at once!
-		Crafty.audio.add('menu','audio/menu.mp3');
-		Crafty.audio.add('pain','audio/Pain.mp3');
-		Crafty.audio.add('swoosh', 'audio/swoosh.mp3');
-		Crafty.audio.add('die', 'audio/Nooo.mp3');
-		Crafty.audio.add('start', 'audio/beardoil_new.mp3');
-		Crafty.audio.add('end', 'audio/woo.mp3');
-		Crafty.audio.add('door', 'audio/door_lock.mp3');
+		window.onload = function() {
 
-		Crafty.sprite(48, 'imgs/brandon.png', {
-			PlayerSprite:[0, 0]
-		});
+			// Here we're just loading a single sound, and calling it "beep".
+	// But you can load multiple assets at once!
+			Crafty.audio.add('menu','audio/menu.mp3');
+			Crafty.audio.add('pain','audio/Pain.mp3');
+			Crafty.audio.add('swoosh', 'audio/swoosh.mp3');
+			Crafty.audio.add('die', 'audio/Nooo.mp3');
+			Crafty.audio.add('start', 'audio/beardoil_new.mp3');
+			Crafty.audio.add('end', 'audio/woo.mp3');
+			Crafty.audio.add('door', 'audio/door_lock.mp3');
 
-		Crafty.sprite(48, 'imgs/slime.png', {
-			SlimeSprite:[0, 0]
-		});
+			Crafty.sprite(48, 'imgs/brandon.png', {
+				PlayerSprite:[0, 0]
+			});
 
-		Crafty.sprite(16, 'imgs/walls/wall_1.png', {
-			Wall_1:[0, 0]
-		});
+			Crafty.sprite(48, 'imgs/slime.png', {
+				SlimeSprite:[0, 0]
+			});
 
-		Crafty.sprite(16, 'imgs/blank.png', {
-			InnerWall:[0, 0]
-		});
+			Crafty.sprite(16, 'imgs/walls/wall_1.png', {
+				Wall_1:[0, 0]
+			});
 
-		Crafty.sprite(16, 'imgs/torches.png', {
-			FireTorch:[0, 0]
-		});
+			Crafty.sprite(16, 'imgs/blank.png', {
+				InnerWall:[0, 0]
+			});
 
-		Crafty.sprite(32, 'imgs/doors.png', {
-			Doors:[0, 0]
-		});
+			Crafty.sprite(16, 'imgs/torches.png', {
+				FireTorch:[0, 0]
+			});
 
-		Crafty.c('Torch', {
-			// This function will be called when the component is added to an entity
-			// So it sets up the things that both our entities had in common
-			init: function() {
-				this.addComponent('2D, Canvas, Color, Solid, SpriteAnimation, FireTorch');
-				this.reel('FireTorch', 500, 0, 0, 4);
-				this.animate('FireTorch', -1);
-				this.w = 16;
-				this.h = 16;
-			},
-		});
+			Crafty.sprite(32, 'imgs/doors.png', {
+				Doors:[0, 0]
+			});
 
-		Crafty.c('CellBlank', {
-			// This function will be called when the component is added to an entity
-			// So it sets up the things that both our entities had in common
-			init: function() {
-				this.addComponent('2D, Canvas, Color, Collision, InnerWall');
-				this.w = 16;
-				this.h = 16;
-			},
-		});
+			Crafty.sprite(16, 'imgs/beard_oil.png', {
+				Oil:[0, 0]
+			});
 
-		Crafty.c('Wall', {
-			// This function will be called when the component is added to an entity
-			// So it sets up the things that both our entities had in common
-			init: function() {
-				this.addComponent('2D, Canvas, Color, Collision, Solid, Wall_1');
-				this.w = 16;
-				this.h = 16;
-			},
-		});
-
-		Crafty.c('Door', {
-			// This function will be called when the component is added to an entity
-			// So it sets up the things that both our entities had in common
-			init: function() {
-				this.addComponent('2D, Canvas, Color, Collision, Door, Solid, SpriteAnimation, Doors');
-				this.reel('Doors',500, 0, 0, 1);
-				this.w = 16;
-				this.h = 16;
-				this.doorState = 'CLOSED';
-				this.originaly = this.y;
-			},
-		});
+			Crafty.c('BeardOil', {
+				// This function will be called when the component is added to an entity
+				// So it sets up the things that both our entities had in common
+				init: function() {
+					this.addComponent('2D, Canvas, Color, Collision, Solid, Oil');
+					this.w = 16;
+					this.h = 16;
+				},
+			});
 
 
-		Crafty.c('Slime', {
-		    // This function will be called when the component is added to an entity
-		    // So it sets up the things that both our entities had in common
-		    init: function() {
-		        this.addComponent('2D, Canvas, Fourway, Keyboard, SpriteAnimation, SlimeSprite');
-		        this.reel('SlimeIdle',500, 0, 0, 3);
-		        this.reel('SlimeWeaponSelect',500, 0, 1, 3);
-		        this.reel('SlimeDown',500, 0, 2, 3);
-		        this.reel('SlimeSide',500, 0, 3, 3);
-		        this.reel('SlimeUp',500, 0, 4, 3);
-		        this.reel('SlimeAttackDown',500, 0, 5, 3);
-		        this.reel('SlimeAttackSide',500, 0, 6, 3);
-		        this.reel('SlimeAttackUp',500, 0, 7, 3);
-		     	this.hitbox = Crafty.e('2D, Canvas, Color, Collision, SlimeHitArea').attr({health:100, parent: this});
-		        this.slimeListenArea = Crafty.e('2D, Canvas, Color, Collision, SlimeListenArea').attr({parent: this});
+			Crafty.c('Torch', {
+				// This function will be called when the component is added to an entity
+				// So it sets up the things that both our entities had in common
+				init: function() {
+					this.addComponent('2D, Canvas, Color, Solid, SpriteAnimation, FireTorch');
+					this.reel('FireTorch', 500, 0, 0, 4);
+					this.animate('FireTorch', -1);
+					this.w = 16;
+					this.h = 16;
+				},
+			});
 
-		        this.state = 'SlimeIdle';
-				this.animate(this.state, -1);
-		        this.w = 16;
-		        this.h = 16;
-		        this.collide = false;
-		        this.chasing = false;
-		        this.enemyspeed = Math.floor(Math.random() * 60) + 1;
-		        this.dir = ['LEFT', 'RIGHT', 'UP', 'DOWN'];
-		        this.movementState = this.dir[Math.floor(Math.random() * this.dir.length) + 0];
+			Crafty.c('CellBlank', {
+				// This function will be called when the component is added to an entity
+				// So it sets up the things that both our entities had in common
+				init: function() {
+					this.addComponent('2D, Canvas, Color, Collision, InnerWall');
+					this.w = 16;
+					this.h = 16;
+				},
+			});
 
-		        this.slimeListenArea.onHit('Player', function() {
-	        		this.chasing = true;
-	        	}.bind(this));
+			Crafty.c('Wall', {
+				// This function will be called when the component is added to an entity
+				// So it sets up the things that both our entities had in common
+				init: function() {
+					this.addComponent('2D, Canvas, Color, Collision, Solid, Wall_1');
+					this.w = 16;
+					this.h = 16;
+				},
+			});
 
-		        this.bind('Move', function(evt) {
-		        	this.hitbox.attr({x: (this.x + this.w / 2) - 8, y: (this.y + this.h / 2) - 3, w: 10, h: 10});
-		        	this.slimeListenArea.attr({x: ((this.x - 50) + this.w / 2), y: ((this.y - 50) + this.h / 2), w: 80, h: 80});
+			Crafty.c('Door', {
+				// This function will be called when the component is added to an entity
+				// So it sets up the things that both our entities had in common
+				init: function() {
+					this.addComponent('2D, Canvas, Color, Collision, Door, Solid, SpriteAnimation, Doors');
+					this.reel('Doors',500, 0, 0, 1);
+					this.w = 16;
+					this.h = 16;
+					this.doorState = 'CLOSED';
+					this.originaly = this.y;
+				},
+			});
 
-		  			if(this.collide == false) {
-		  				return false;
-		  			}
-		        	// stops Slime going through level
-		        	if(this.x < 0) {
-		        		this.x = 1;
-		        		this.movementState = 'LEFT';
-		        	} else if(this.x > (this.game.tile * dimensions) - this.w) {
-		        		this.x = this.game.tile * dimensions - this.w;
-		        		this.movementState = 'RIGHT';
-		        	} else if(this.y < 0) {
-		        		this.y = 1;
-		        		this.movementState = 'DOWN';
-		        	} else if(this.y > (this.game.tile * dimensions) - this.h) {
-		        		this.y = this.game.tile * dimensions - this.h;
-		        		this.movementState = 'UP';
-		        	}
 
-					var wallCollisions = this.hitbox.hit('Wall');
-					if(wallCollisions) {
-					    var wallCollisionData = wallCollisions[0];
-				  		this.x -= wallCollisionData.overlap * wallCollisionData.nx;
-	    				this.y -= wallCollisionData.overlap * wallCollisionData.ny;
+			Crafty.c('Slime', {
+			    // This function will be called when the component is added to an entity
+			    // So it sets up the things that both our entities had in common
+			    init: function() {
+			        this.addComponent('2D, Canvas, Fourway, Keyboard, SpriteAnimation, SlimeSprite');
+			        this.reel('SlimeIdle',500, 0, 0, 3);
+			        this.reel('SlimeWeaponSelect',500, 0, 1, 3);
+			        this.reel('SlimeDown',500, 0, 2, 3);
+			        this.reel('SlimeSide',500, 0, 3, 3);
+			        this.reel('SlimeUp',500, 0, 4, 3);
+			        this.reel('SlimeAttackDown',500, 0, 5, 3);
+			        this.reel('SlimeAttackSide',500, 0, 6, 3);
+			        this.reel('SlimeAttackUp',500, 0, 7, 3);
+			     	this.hitbox = Crafty.e('2D, Canvas, Color, Collision, SlimeHitArea').attr({health:100, parent: this});
+			        this.slimeListenArea = Crafty.e('2D, Canvas, Color, Collision, SlimeListenArea').attr({parent: this});
 
-	    				this.hitbox.x -= wallCollisionData.overlap * wallCollisionData.nx;
-	    				this.hitbox.y -= wallCollisionData.overlap * wallCollisionData.ny;
+			        this.state = 'SlimeIdle';
+					this.animate(this.state, -1);
+			        this.w = 16;
+			        this.h = 16;
+			        this.collide = false;
+			        this.chasing = false;
+			        this.enemyspeed = Math.floor(Math.random() * 60) + 1;
+			        this.dir = ['LEFT', 'RIGHT', 'UP', 'DOWN'];
+			        this.movementState = this.dir[Math.floor(Math.random() * this.dir.length) + 0];
 
-	    				if(this.movementState == 'LEFT') {
-	    					this.movementState = 'RIGHT';
-	    					this.state = 'SlimeSide';
-		        			this.flip('X');
-	    				} else if(this.movementState == 'RIGHT') {
-	    					this.movementState = 'LEFT';
-	    				} else if(this.movementState == 'UP') {
-	    					this.movementState = 'DOWN';
-	    				} else if(this.movementState == 'DOWN') {
-	    					this.movementState = 'UP';
-	    				}
-	    			}
+			        this.slimeListenArea.onHit('Player', function() {
+		        		this.chasing = true;
+		        	}.bind(this));
 
-	    			var doorCollision = this.hitbox.hit('Door');
-					if(doorCollision) {
-					    var doorCollision = doorCollision[0];
-					    if(doorCollision.obj.rotation == 0) {
-				  			this.x -= doorCollision.overlap * doorCollision.nx;
-	    					this.y -= doorCollision.overlap * doorCollision.ny;
+			        this.bind('Move', function(evt) {
+			        	this.hitbox.attr({x: (this.x + this.w / 2) - 8, y: (this.y + this.h / 2) - 3, w: 10, h: 10});
+			        	this.slimeListenArea.attr({x: ((this.x - 50) + this.w / 2), y: ((this.y - 50) + this.h / 2), w: 80, h: 80});
 
-	    					this.hitbox.x -= doorCollision.overlap * doorCollision.nx;
-	    					this.hitbox.y -= doorCollision.overlap * doorCollision.ny;
+			  			if(this.collide == false) {
+			  				return false;
+			  			}
+			        	// stops Slime going through level
+			        	if(this.x < 0) {
+			        		this.x = 1;
+			        		this.movementState = 'LEFT';
+			        	} else if(this.x > (this.game.tile * dimensions) - this.w) {
+			        		this.x = this.game.tile * dimensions - this.w;
+			        		this.movementState = 'RIGHT';
+			        	} else if(this.y < 0) {
+			        		this.y = 1;
+			        		this.movementState = 'DOWN';
+			        	} else if(this.y > (this.game.tile * dimensions) - this.h) {
+			        		this.y = this.game.tile * dimensions - this.h;
+			        		this.movementState = 'UP';
+			        	}
+
+						var wallCollisions = this.hitbox.hit('Wall');
+						if(wallCollisions) {
+						    var wallCollisionData = wallCollisions[0];
+					  		this.x -= wallCollisionData.overlap * wallCollisionData.nx;
+		    				this.y -= wallCollisionData.overlap * wallCollisionData.ny;
+
+		    				this.hitbox.x -= wallCollisionData.overlap * wallCollisionData.nx;
+		    				this.hitbox.y -= wallCollisionData.overlap * wallCollisionData.ny;
 
 		    				if(this.movementState == 'LEFT') {
 		    					this.movementState = 'RIGHT';
@@ -195,495 +189,541 @@
 		    				} else if(this.movementState == 'DOWN') {
 		    					this.movementState = 'UP';
 		    				}
-	    				}
-	    			}
-				});
+		    			}
 
-				this.bind('UpdateFrame', function(eventData) {
-					var state = 'SlimeIdle';
-					var toPlayerX = Crafty('Player').x - this.x;
-					var toPlayerY = Crafty('Player').y - this.y;
+		    			var doorCollision = this.hitbox.hit('Door');
+						if(doorCollision) {
+						    var doorCollision = doorCollision[0];
+						    if(doorCollision.obj.rotation == 0) {
+					  			this.x -= doorCollision.overlap * doorCollision.nx;
+		    					this.y -= doorCollision.overlap * doorCollision.ny;
 
-					if(this.chasing == false) {
-						if(this.movementState == 'UP') {
-							this.y -= 0.5 * (eventData.dt / 1000) * this.enemyspeed;
-							state = 'SlimeUp';
-						} else if(this.movementState == 'DOWN') {
-							this.y += 0.5 * (eventData.dt / 1000) * this.enemyspeed;
-							state = 'SlimeDown';
-						} else if(this.movementState == 'LEFT') {
-							this.x -= 0.5 * (eventData.dt / 1000) * this.enemyspeed;
-							state = 'SlimeSide';
-		        			this.flip('X');
-						} else if (this.movementState == 'RIGHT') {
-							this.x += 0.5 * (eventData.dt / 1000) * this.enemyspeed;
-							state = 'SlimeSide';
-		        			this.unflip('X');
-						}
-					} else {
-						if(Math.abs(toPlayerX) > 0 ||  Math.abs(toPlayerY) > 0) {
-							// Normalize
-							var toPlayerLength = Math.sqrt(toPlayerX * toPlayerX + toPlayerY * toPlayerY);
-							toPlayerX = toPlayerX / toPlayerLength;
-							toPlayerY = toPlayerY / toPlayerLength;
+		    					this.hitbox.x -= doorCollision.overlap * doorCollision.nx;
+		    					this.hitbox.y -= doorCollision.overlap * doorCollision.ny;
 
-							var ddx = Crafty('Player').x - this.x - 5;
-							var ddy = Math.abs(Crafty('Player').y - this.y - 5);
+			    				if(this.movementState == 'LEFT') {
+			    					this.movementState = 'RIGHT';
+			    					this.state = 'SlimeSide';
+				        			this.flip('X');
+			    				} else if(this.movementState == 'RIGHT') {
+			    					this.movementState = 'LEFT';
+			    				} else if(this.movementState == 'UP') {
+			    					this.movementState = 'DOWN';
+			    				} else if(this.movementState == 'DOWN') {
+			    					this.movementState = 'UP';
+			    				}
+		    				}
+		    			}
+					});
 
-							if(ddy > 5) {
-								if(toPlayerY < toPlayerX) {
-									state = 'SlimeAttackUp';
-								} else if(toPlayerY > toPlayerX) {
-									state = 'SlimeAttackDown';
-								}
-							} else {
-								state = 'SlimeAttackSide';
-								if(toPlayerX > 0) {
-									this.unflip('X');
+					this.bind('UpdateFrame', function(eventData) {
+						var state = 'SlimeIdle';
+						var toPlayerX = Crafty('Player').x - this.x;
+						var toPlayerY = Crafty('Player').y - this.y;
+
+						if(this.chasing == false) {
+							if(this.movementState == 'UP') {
+								this.y -= 0.5 * (eventData.dt / 1000) * this.enemyspeed;
+								state = 'SlimeUp';
+							} else if(this.movementState == 'DOWN') {
+								this.y += 0.5 * (eventData.dt / 1000) * this.enemyspeed;
+								state = 'SlimeDown';
+							} else if(this.movementState == 'LEFT') {
+								this.x -= 0.5 * (eventData.dt / 1000) * this.enemyspeed;
+								state = 'SlimeSide';
+			        			this.flip('X');
+							} else if (this.movementState == 'RIGHT') {
+								this.x += 0.5 * (eventData.dt / 1000) * this.enemyspeed;
+								state = 'SlimeSide';
+			        			this.unflip('X');
+							}
+						} else {
+							if(Math.abs(toPlayerX) > 0 ||  Math.abs(toPlayerY) > 0) {
+								// Normalize
+								var toPlayerLength = Math.sqrt(toPlayerX * toPlayerX + toPlayerY * toPlayerY);
+								toPlayerX = toPlayerX / toPlayerLength;
+								toPlayerY = toPlayerY / toPlayerLength;
+
+								var ddx = Crafty('Player').x - this.x - 5;
+								var ddy = Math.abs(Crafty('Player').y - this.y - 5);
+
+								if(ddy > 5) {
+									if(toPlayerY < toPlayerX) {
+										state = 'SlimeAttackUp';
+									} else if(toPlayerY > toPlayerX) {
+										state = 'SlimeAttackDown';
+									}
 								} else {
-									this.flip('X');
+									state = 'SlimeAttackSide';
+									if(toPlayerX > 0) {
+										this.unflip('X');
+									} else {
+										this.flip('X');
+									}
 								}
+
+								this.x += toPlayerX * (eventData.dt / 1000) * this.enemyspeed;
+								this.y += toPlayerY * (eventData.dt / 1000) *  this.enemyspeed;
+							} else {
+								state = 'SlimeAttackUp'
 							}
-
-							this.x += toPlayerX * (eventData.dt / 1000) * this.enemyspeed;
-							this.y += toPlayerY * (eventData.dt / 1000) *  this.enemyspeed;
-						} else {
-							state = 'SlimeAttackUp'
 						}
-					}
 
-					if(this.state != state) {
-				    	this.state = state;
-			    		this.animate(state, -1);
-			    	}
-				});
-		    },
+						if(this.state != state) {
+					    	this.state = state;
+				    		this.animate(state, -1);
+				    	}
+					});
+			    },
 
-		    health: function() {
-		    	console.log('health');
-		    }
-		});
+			    health: function() {
+			    	console.log('health');
+			    }
+			});
 
-		Crafty.c('Player', {
-		    // This function will be called when the component is added to an entity
-		    // So it sets up the things that both our entities had in common
-		    init: function() {
-		        this.addComponent('2D, Canvas, Fourway, Keyboard, SpriteAnimation, PlayerSprite');
-		        this.reel('PlayerIdle',500, 0, 0, 3);
-		        this.reel('PlayerWeaponSelect',500, 0, 1, 3);
-		        this.reel('PlayerDown',500, 0, 2, 3);
-		        this.reel('PlayerSide',500, 0, 3, 3);
-		        this.reel('PlayerUp',500, 0, 4, 3);
-		        this.reel('PlayerAttackDown',500, 0, 5, 3);
-		        this.reel('PlayerAttackSide',500, 0, 6, 3);
-		        this.reel('PlayerAttackUp',500, 0, 7, 3);
-		        this.reel('PlayerHitUp',500, 0, 8, 3);
-                this.reel('PlayerHitSide',500, 0, 9, 3);
-                this.reel('PlayerHitDown',500, 0, 10, 3);
-		     	this.hitbox = Crafty.e('2D, Canvas, Color, Collision, PlayerHitArea').attr({health:100});
-		     	this.healthText = Crafty.e('2D, Canvas, Color, Text').attr({x: 0, y: 0}).textColor('red').textFont({ size: '4px', weight: 'bold' }).color('black');;
-		     	this.scoreText = Crafty.e('2D, Canvas, Color, Text').textColor('red').textFont({ size: '4px', weight: 'bold' }).color('black');;
-		     	this.levelText = Crafty.e('2D, Canvas, Color, Text').textColor('red').textFont({ size: '4px', weight: 'bold' }).color('black');;
+			Crafty.c('Player', {
+			    // This function will be called when the component is added to an entity
+			    // So it sets up the things that both our entities had in common
+			    init: function() {
+			        this.addComponent('2D, Canvas, Fourway, Keyboard, SpriteAnimation, PlayerSprite');
+			        this.reel('PlayerIdle',500, 0, 0, 3);
+			        this.reel('PlayerWeaponSelect',500, 0, 1, 3);
+			        this.reel('PlayerDown',500, 0, 2, 3);
+			        this.reel('PlayerSide',500, 0, 3, 3);
+			        this.reel('PlayerUp',500, 0, 4, 3);
+			        this.reel('PlayerAttackDown',500, 0, 5, 3);
+			        this.reel('PlayerAttackSide',500, 0, 6, 3);
+			        this.reel('PlayerAttackUp',500, 0, 7, 3);
+			        this.reel('PlayerHitUp',500, 0, 8, 3);
+	                this.reel('PlayerHitSide',500, 0, 9, 3);
+	                this.reel('PlayerHitDown',500, 0, 10, 3);
+			     	this.hitbox = Crafty.e('2D, Canvas, Color, Collision, PlayerHitArea').attr({health:100});
+			     	this.healthText = Crafty.e('2D, Canvas, Color, Text').attr({x: 0, y: 0}).textColor('red').textFont({ size: '4px', weight: 'bold' }).color('black');;
+			     	this.scoreText = Crafty.e('2D, Canvas, Color, Text').textColor('red').textFont({ size: '4px', weight: 'bold' }).color('black');;
+			     	this.levelText = Crafty.e('2D, Canvas, Color, Text').textColor('red').textFont({ size: '4px', weight: 'bold' }).color('black');;
 
-		        this.state = 'PlayerIdle';
-				this.animate(this.state, -1);
-		        this.fourway(100)
-		        this.w = 16;
-		        this.h = 16;
-		        this.game = null;
-		        this.camera = false;
-		        this.collide = false;
-		        this.beingHit = false;
-		        this.ckdoor = 0;
+			        this.state = 'PlayerIdle';
+					this.animate(this.state, -1);
+			        this.fourway(100)
+			        this.w = 16;
+			        this.h = 16;
+			        this.game = null;
+			        this.camera = false;
+			        this.collide = false;
+			        this.beingHit = false;
+			        this.ckdoor = 0;
 
-		        Crafty.viewport.clampToEntities = true;
-  	 	 		Crafty.viewport.bounds = {min:{x:0, y:0}};
-  	 	 		Crafty.viewport.clampToEntities = false;
-				Crafty.viewport.follow(this);
-				Crafty.viewport.scale(4);
+			        Crafty.viewport.clampToEntities = true;
+	  	 	 		Crafty.viewport.bounds = {min:{x:0, y:0}};
+	  	 	 		Crafty.viewport.clampToEntities = false;
+					Crafty.viewport.follow(this);
+					Crafty.viewport.scale(4);
 
-				this.hitbox.onHit('SlimeHitArea', function(slimeCollisions) {
-					this.beingHit = true;
+					this.hitbox.onHit('SlimeHitArea', function(slimeCollisions) {
+						this.beingHit = true;
 
-					for(var j = 0; j < slimeCollisions.length; j++) {
-	    				if(this.attacking) {
-	    					slimeCollisions[j].obj.health -= 1.8;
-	    					if(slimeCollisions[j].obj.health <= 0) {
-	    						slimeCollisions[j].obj.parent.destroy();
-	    						this.game.score += 1;
-	    					}
-	    				}
-
-	    				if(slimeCollisions[j].obj.health > 0) {
-	    					this.beingHit = true;
-	    				} else {
-	    					this.beingHit = false;
-	    				}
-	    			}
-	    		
-	    			setTimeout(function() {
-	    				this.beingHit = false;
-	    			}.bind(this), 2000)
-	    			
-					this.hitbox.resetHitChecks();
-				}.bind(this));
-
-		        this.bind('Move', function(evt) {
-		        	this.hitbox.attr({x: (this.x + this.w / 2) - 3, y: (this.y + this.h / 2) - 3, w: 5, h: 6});
-		        	
-		        	if(this.collide == false) {
-		        		return;
-		        	}
-
-		        	// stops player going through level
-		        	if(this.x < 0) {
-		        		this.x = 1;
-		        	} else if(this.x > (this.game.tile * dimensions) - this.w) {
-		        		this.x = this.game.tile * dimensions - this.w;
-		        	} else if(this.y < 0) {
-		        		this.y = 1;
-		        	} else if(this.y > (this.game.tile * dimensions) - this.h) {
-		        		this.y = this.game.tile * dimensions - this.h;
-		        	}
-
-					var wallCollisions = this.hitbox.hit('Wall');
-					var endCollisions = this.hitbox.hit('EndPoint');
-					if(wallCollisions) {
-					    var wallCollisionData = wallCollisions[0];
-				  		this.x -= wallCollisionData.overlap * wallCollisionData.nx;
-	    				this.y -= wallCollisionData.overlap * wallCollisionData.ny;
-
-	    				this.hitbox.x -= wallCollisionData.overlap * wallCollisionData.nx;
-	    				this.hitbox.y -= wallCollisionData.overlap * wallCollisionData.ny;
-	    			} else if(endCollisions) {
-						Crafty.enterScene('GameStart');
-						this.level += 1;
-	    			}
-
-	    			var doorCollision = this.hitbox.hit('Door');
-					if(doorCollision) {
-					    var doorCollision = doorCollision[0];
-					    if(doorCollision.obj.rotation == 0) {
-					  		this.x -= doorCollision.overlap * doorCollision.nx;
-		    				this.y -= doorCollision.overlap * doorCollision.ny;
-
-		    				this.hitbox.x -= doorCollision.overlap * doorCollision.nx;
-		    				this.hitbox.y -= doorCollision.overlap * doorCollision.ny;
-	    				}
-
-	    				if(this.attacking) {
-							this.ckdoor++;
-	    					if(this.ckdoor >= 5) {
-		    					if(doorCollision.obj.doorState == 'OPEN') {
-									doorCollision.obj.doorState = 'CLOSED';
-		    						doorCollision.obj.rotation = 90;
-		    						doorCollision.obj.y -= 5;
-		    					} else {
-									doorCollision.obj.doorState = 'OPEN';
-		    						doorCollision.obj.rotation = 0;
-		    						doorCollision.obj.y = doorCollision.obj.originaly;
+						for(var j = 0; j < slimeCollisions.length; j++) {
+		    				if(this.attacking) {
+		    					slimeCollisions[j].obj.health -= 1.8;
+		    					if(slimeCollisions[j].obj.health <= 0) {
+		    						slimeCollisions[j].obj.parent.destroy();
+		    						this.game.score += 1;
 		    					}
-		    					Crafty.audio.play('door');
-		    					this.ckdoor = 0;
-	    					}
-	    				}
-	    			}
-				});
+		    				}
 
-		        this.bind('KeyDown', function(e) {
-					if (e.key == Crafty.keys.SPACE) {
-						Crafty.audio.play('swoosh');
-					}
-				});
+		    				if(slimeCollisions[j].obj.health > 0) {
+		    					this.beingHit = true;
+		    				} else {
+		    					this.beingHit = false;
+		    				}
+		    			}
+		    		
+		    			setTimeout(function() {
+		    				this.beingHit = false;
+		    			}.bind(this), 2000)
+		    			
+						this.hitbox.resetHitChecks();
+					}.bind(this));
 
-		        this.bind('KeyUp', function(e) {
-		        	if (e.key == Crafty.keys.SPACE) {
-						this.attacking = false;
-					}
-		        })
+			        this.bind('Move', function(evt) {
+			        	this.hitbox.attr({x: (this.x + this.w / 2) - 3, y: (this.y + this.h / 2) - 3, w: 5, h: 6});
+			        	
+			        	if(this.collide == false) {
+			        		return;
+			        	}
 
-				this.bind('UpdateFrame', function() {
-					if(this.game) {
-						//new Crafty.polygon([-50, -50, -50, -20, -20, -20, -50,-20]);
-						this.healthText.attr({x: this.x -35, y: this.y - 35}).text('Health:' + Math.round(this.hitbox.health)).color('black');
-						this.scoreText.attr({x: this.x -35, y: this.y - 31}).text('Score:' + this.game.score);
-						this.levelText.attr({x: this.x -35, y: this.y - 27}).text('Level:' + this.game.level);
-						//this.scoreBgr.attr({x: this.x -35, y: this.y -35, w: 30, h: 30}).color('black');
-		        	}
+			        	// stops player going through level
+			        	if(this.x < 0) {
+			        		this.x = 1;
+			        	} else if(this.x > (this.game.tile * dimensions) - this.w) {
+			        		this.x = this.game.tile * dimensions - this.w;
+			        	} else if(this.y < 0) {
+			        		this.y = 1;
+			        	} else if(this.y > (this.game.tile * dimensions) - this.h) {
+			        		this.y = this.game.tile * dimensions - this.h;
+			        	}
 
-					var k = false;
-					var state = 'PlayerIdle';
-					if (Crafty.s('Keyboard').isKeyDown('A')||Crafty.s('Keyboard').isKeyDown('LEFT_ARROW')) {
-						k = true;
-						state = 'PlayerSide';
-						this.flip('X');
-					}
-			  		if (Crafty.s('Keyboard').isKeyDown('D')||Crafty.s('Keyboard').isKeyDown('RIGHT_ARROW')) {
-			  			k = true;
-			  			state = 'PlayerSide';
-					    this.unflip('X');
-			  		}
+						var wallCollisions = this.hitbox.hit('Wall');
+						var endCollisions = this.hitbox.hit('EndPoint');
+						if(wallCollisions) {
+						    var wallCollisionData = wallCollisions[0];
+					  		this.x -= wallCollisionData.overlap * wallCollisionData.nx;
+		    				this.y -= wallCollisionData.overlap * wallCollisionData.ny;
 
-					if (Crafty.s('Keyboard').isKeyDown('W')||Crafty.s('Keyboard').isKeyDown('UP_ARROW')) {
-						k = true;
-						state = 'PlayerUp';
-					}
+		    				this.hitbox.x -= wallCollisionData.overlap * wallCollisionData.nx;
+		    				this.hitbox.y -= wallCollisionData.overlap * wallCollisionData.ny;
+		    			} else if(endCollisions) {
+							Crafty.enterScene('GameStart');
+							this.level += 1;
+		    			}
 
-					if (Crafty.s('Keyboard').isKeyDown('S')||Crafty.s('Keyboard').isKeyDown('DOWN_ARROW')) {
-						k = true;
-						state = 'PlayerDown';
-					}
+		    			var oilCollision = this.hitbox.hit('BeardOil');
 
-					if (Crafty.s('Keyboard').isKeyDown('SPACE')) {
-						k = true;
-						this.attacking = true;
-						if(state == 'PlayerIdle'){
-							state = 'PlayerWeaponSelect';
+		    			if(oilCollision) {
+		    				var oilCollision = oilCollision[0];
+		    				oilCollision.obj.destroy();
+		    				this.hitbox.health += 10;
+		    			}
+
+		    			var doorCollision = this.hitbox.hit('Door');
+						if(doorCollision) {
+						    var doorCollision = doorCollision[0];
+						    if(doorCollision.obj.rotation == 0) {
+						  		this.x -= doorCollision.overlap * doorCollision.nx;
+			    				this.y -= doorCollision.overlap * doorCollision.ny;
+
+			    				this.hitbox.x -= doorCollision.overlap * doorCollision.nx;
+			    				this.hitbox.y -= doorCollision.overlap * doorCollision.ny;
+		    				}
+
+		    				if(this.attacking) {
+								this.ckdoor++;
+		    					if(this.ckdoor >= 5) {
+			    					if(doorCollision.obj.doorState == 'OPEN') {
+										doorCollision.obj.doorState = 'CLOSED';
+			    						doorCollision.obj.rotation = 90;
+			    						doorCollision.obj.y -= 5;
+			    					} else {
+										doorCollision.obj.doorState = 'OPEN';
+			    						doorCollision.obj.rotation = 0;
+			    						doorCollision.obj.y = doorCollision.obj.originaly;
+			    					}
+			    					Crafty.audio.play('door');
+			    					this.ckdoor = 0;
+		    					}
+		    				}
+		    			}
+					});
+
+			        this.bind('KeyDown', function(e) {
+						if (e.key == Crafty.keys.SPACE) {
+							Crafty.audio.play('swoosh');
 						}
-						else if(state == 'PlayerUp'){
-							state = 'PlayerAttackUp';
+					});
+
+			        this.bind('KeyUp', function(e) {
+			        	if (e.key == Crafty.keys.SPACE) {
+							this.attacking = false;
 						}
-						else if(state == 'PlayerDown'){
-							state = 'PlayerAttackDown';
+			        })
+
+					this.bind('UpdateFrame', function() {
+						if(this.game) {
+							//new Crafty.polygon([-50, -50, -50, -20, -20, -20, -50,-20]);
+							this.healthText.attr({x: this.x -35, y: this.y - 35}).text('Health:' + Math.round(this.hitbox.health)).color('black');
+							this.scoreText.attr({x: this.x -35, y: this.y - 31}).text('Score:' + this.game.score);
+							this.levelText.attr({x: this.x -35, y: this.y - 27}).text('Level:' + this.game.level);
+							//this.scoreBgr.attr({x: this.x -35, y: this.y -35, w: 30, h: 30}).color('black');
+			        	}
+
+						var k = false;
+						var state = 'PlayerIdle';
+						if (Crafty.s('Keyboard').isKeyDown('A')||Crafty.s('Keyboard').isKeyDown('LEFT_ARROW')) {
+							k = true;
+							state = 'PlayerSide';
+							this.flip('X');
 						}
-						else if(state == 'PlayerUp'){
-							state = 'PlayerAttackUp';
+				  		if (Crafty.s('Keyboard').isKeyDown('D')||Crafty.s('Keyboard').isKeyDown('RIGHT_ARROW')) {
+				  			k = true;
+				  			state = 'PlayerSide';
+						    this.unflip('X');
+				  		}
+
+						if (Crafty.s('Keyboard').isKeyDown('W')||Crafty.s('Keyboard').isKeyDown('UP_ARROW')) {
+							k = true;
+							state = 'PlayerUp';
 						}
-						else if(state == 'PlayerSide'){
-							state = 'PlayerAttackSide';
+
+						if (Crafty.s('Keyboard').isKeyDown('S')||Crafty.s('Keyboard').isKeyDown('DOWN_ARROW')) {
+							k = true;
+							state = 'PlayerDown';
 						}
-					}
 
-					if(this.beingHit) {
-						if(!this.attacking)
-							state = 'PlayerHitUp';
-						Crafty.audio.play('pain');
-						this.hitbox.health -= 0.4;
-						if(this.hitbox.health <= 0) {
-							Crafty.enterScene('GameOver'); // player dead - game over
+						if (Crafty.s('Keyboard').isKeyDown('SPACE')) {
+							k = true;
+							this.attacking = true;
+							if(state == 'PlayerIdle'){
+								state = 'PlayerWeaponSelect';
+							}
+							else if(state == 'PlayerUp'){
+								state = 'PlayerAttackUp';
+							}
+							else if(state == 'PlayerDown'){
+								state = 'PlayerAttackDown';
+							}
+							else if(state == 'PlayerUp'){
+								state = 'PlayerAttackUp';
+							}
+							else if(state == 'PlayerSide'){
+								state = 'PlayerAttackSide';
+							}
 						}
-					}
 
-				    if(k && this.state != state) {
-				    	this.state = state;
-			    		this.animate(state, -1);
-			    	} else if(k == false && this.state != state) { // go back to idle
-			    		this.state = 'PlayerIdle';
-			    		this.animate('PlayerIdle', -1);
-			    	}
+						if(this.beingHit) {
+							if(!this.attacking)
+								state = 'PlayerHitUp';
+							Crafty.audio.play('pain');
+							this.hitbox.health -= 0.4;
+							if(this.hitbox.health <= 0) {
+								Crafty.enterScene('GameOver'); // player dead - game over
+							}
+						}
 
-				});
-		    },
-		});
+					    if(k && this.state != state) {
+					    	this.state = state;
+				    		this.animate(state, -1);
+				    	} else if(k == false && this.state != state) { // go back to idle
+				    		this.state = 'PlayerIdle';
+				    		this.animate('PlayerIdle', -1);
+				    	}
 
-		 var game = new function() {
-		 	this.tile = 16;
-		 	this.map = [];
-		 	this.level = 0;
-		 	this.score = 0;
+					});
+			    },
+			});
 
-		 	this.gameOver = function() {
-		 		this.level = 0;
-				Crafty.init(dimensions * this.tile, dimensions * this.tile, document.getElementById('game'));
+			 var game = new function() {
+			 	this.tile = 16;
+			 	this.map = [];
+			 	this.level = 0;
+			 	this.score = 0;
 
-				setTimeout(function() {
-					Crafty.audio.play('die');
-				}, 2000);
+			 	this.gameOver = function() {
+			 		this.level = 0;
+					Crafty.init(dimensions * this.tile, dimensions * this.tile, document.getElementById('game'));
 
-		 		Crafty.e('2D, Canvas, Image').image('imgs/game_over.png').attr({w: 600, h: 600})
-		 		 .bind('KeyDown', function(e) {
-				    if (e.key == Crafty.keys.ENTER) {
-				      Crafty.enterScene('MainMenu');
-				    }
-				  });
+					setTimeout(function() {
+						Crafty.audio.play('die');
+					}, 2000);
 
-		 		 Crafty.e('2D, Canvas, Image').image('imgs/angel.png').attr({w: 299, h: 299, x: 30, y: -70, dir: 'down'}).bind('UpdateFrame', function(eventData) {
+			 		Crafty.e('2D, Canvas, Image').image('imgs/game_over.png').attr({w: 600, h: 600})
+			 		 .bind('KeyDown', function(e) {
+					    if (e.key == Crafty.keys.ENTER) {
+					      Crafty.enterScene('MainMenu');
+					    }
+					  });
 
-		 		 	if(this.dir == 'down') {
-		 		 		this.y += 15 * (eventData.dt / 500);
-		 		 		if(this.y > 10) {
-		 		 		  this.dir = 'up';
+			 		 Crafty.e('2D, Canvas, Image').image('imgs/angel.png').attr({w: 299, h: 299, x: 30, y: -70, dir: 'down'}).bind('UpdateFrame', function(eventData) {
+
+			 		 	if(this.dir == 'down') {
+			 		 		this.y += 15 * (eventData.dt / 500);
+			 		 		if(this.y > 10) {
+			 		 		  this.dir = 'up';
+				 		 	}
+			 		 	} else if(this.dir == 'up') {
+			 		 		this.y -= 15 * (eventData.dt / 500);
+			 		 		if(this.y < -70) {
+			 		 			this.dir = 'down';
+			 		 		}
 			 		 	}
-		 		 	} else if(this.dir == 'up') {
-		 		 		this.y -= 15 * (eventData.dt / 500);
-		 		 		if(this.y < -70) {
-		 		 			this.dir = 'down';
-		 		 		}
-		 		 	}
-		 		 })
-		 	},
+			 		 })
+			 	},
 
-		 	// scenes
-		 	this.gameStart = function() {
-				Crafty.audio.remove('menu');
-				Crafty.init(dimensions * this.tile, dimensions * this.tile, document.getElementById('game'));
-				this.renderMap();
-				this.placeStartPoint();
-				this.placeEndPoint();
-				this.placeEnemies();
-				this.level += 1;
-				setTimeout(function() {
-					Crafty.audio.play('start');
-		 		}, 500);
-			},
+			 	// scenes
+			 	this.gameStart = function() {
+					Crafty.audio.remove('menu');
+					Crafty.init(dimensions * this.tile, dimensions * this.tile, document.getElementById('game'));
+					this.level += 1;
+					this.renderMap();
+					this.placeStartPoint();
+					this.placeEndPoint();
+					this.placeEnemies();
+					
+					setTimeout(function() {
+						Crafty.audio.play('start');
+			 		}, 500);
 
-			this.placeEnemies = function() {
-				var placed = false;
-				this.getMap(function(x,y,value, type) {
-					var rx = Math.floor(Math.random() * 20) + 8;
-					var ry = Math.floor(Math.random() * 20) + 8;
-					var number = 4;
+				},
 
-					if(value == 0 && placed < number) {
-						if(x >= rx && y >= ry) {
-							placed++;
-							var slime = Crafty.e('Slime').attr({x: x * this.tile, y: y * this.tile, w: this.tile, h: this.tile});
-							slime.collide = true;
-							slime.game = this;
-						}
-					}
-				}.bind(this));
-			},
+				this.placeEnemies = function() {
+					var placed = false;
+					this.getMap(function(x,y,value, type) {
+						var rx = Math.floor(Math.random() * 20) + 8;
+						var ry = Math.floor(Math.random() * 20) + 8;
+						var number = 4;
 
-			this.placeStartPoint = function() {
-				var placed = false;
-				this.getMap(function(x,y,value, type) {
-					var rx = Math.floor(Math.random() * 6) + 1;
-					var ry = Math.floor(Math.random() * 6) + 1;
-
-					if(value == 0 && placed == false) {
-						if(x >= rx && y >= ry) {
-							placed = true;
-							//Crafty.e('2D, Canvas, Color').attr({x: x * this.tile, y: y * this.tile, w: this.tile, h: this.tile}).color('#0f0');
-
-							Crafty.e('2D, Canvas, Image').image('imgs/step_finish.png').attr({w: 16, h: 16, x: x * this.tile, y: y * this.tile });
-
-							var player = Crafty.e('Player').attr({x: x * this.tile, y: y * this.tile});
-							player.collide = true;
-							player.game = this;
-						}
-					}
-				}.bind(this));
-			},
-
-			this.placeEndPoint = function() {
-				var placed = false;
-				var sx = 0;
-				var sy = 0;
-
-				this.getMap(function(x,y,value, type) {
-					var rx = Math.floor(Math.random() * this.tile) + (this.tile / 3);
-					var ry = Math.floor(Math.random() * this.tile) + (this.tile / 2);
-
-					if(value == 0 && placed == false) {
-						if(x >= rx && y >= ry) {
-							placed = true;
-							//Crafty.e('2D, Canvas, Color, Collision, EndPoint').attr({x: x * this.tile, y: y * this.tile, w: this.tile, h: this.tile}).color('#f00');
-							//
-
-							Crafty.e('2D, Canvas, Image, Collision, EndPoint').image('imgs/step_start.png').attr({w: 16, h: 16, x: x * this.tile, y: y * this.tile });
-
-							sx = x * this.tile;
-							sy = y * this.tile;
-						}
-					}
-
-
-					if(value == 0 && placed) {
-						if( type == 'topbottom') {
-							var randomNum = Math.floor((Math.random() * 100) + 10);
-							var randomNum2 = Math.floor((Math.random() * 100) + 1);
-							if(randomNum % 2 * this.tile && randomNum2 < 40) {
-
-								if(sx != x * this.tile && sy != y * this.tile) {
-									var d = Crafty.e('Door').attr({w: 16, h: 16, x: x * this.tile, y: y * this.tile });
-									d.originaly = y * this.tile;
-								}
+						if(value == 0 && placed < number) {
+							if(x >= rx && y >= ry) {
+								placed++;
+								var slime = Crafty.e('Slime').attr({x: x * this.tile, y: y * this.tile, w: this.tile, h: this.tile});
+								slime.collide = true;
+								slime.game = this;
 							}
-						//	this.rotation = 45;
 						}
-					}
-				}.bind(this));
-			},
+					}.bind(this));
+				},
 
-			this.renderMap = function() {
-				this.map = createMap();
-				var torchplaced = false;
-				this.getMap(function(x,y,value, type) {
-					if(value == 1) {
-						if(type == 'all') {
-							//Crafty.e('2D, Canvas, Color').attr({x: x * this.tile, y: y * this.tile, w: this.tile, h: this.tile}).color('#000');
-							Crafty.e('CellBlank').attr({x: x * this.tile, y: y * this.tile, w: this.tile, h: this.tile}).color('#f90')
-						} else {
-							Crafty.e('Wall').attr({x: x * this.tile, y: y * this.tile, w: this.tile, h: this.tile}).color('#f90');
+				this.placeStartPoint = function() {
+					var placed = false;
+					this.getMap(function(x,y,value, type) {
+						var rx = Math.floor(Math.random() * 6) + 1;
+						var ry = Math.floor(Math.random() * 6) + 1;
 
-							if(type != 'topbottom' && type != 'left' && type != 'toprightbottomleft') {
-								var randomNum = Math.floor((Math.random() * 100) + 1);
+						if(value == 0 && placed == false) {
+							if(x >= rx && y >= ry) {
+								placed = true;
+								//Crafty.e('2D, Canvas, Color').attr({x: x * this.tile, y: y * this.tile, w: this.tile, h: this.tile}).color('#0f0');
+
+								Crafty.e('2D, Canvas, Image').image('imgs/step_finish.png').attr({w: 16, h: 16, x: x * this.tile, y: y * this.tile });
+
+								var player = Crafty.e('Player').attr({x: x * this.tile, y: y * this.tile});
+								player.collide = true;
+								player.game = this;
+							}
+						}
+					}.bind(this));
+				},
+
+				this.placeEndPoint = function() {
+					var placed = false;
+					var placedBeardOil = false;
+					var sx = 0;
+					var sy = 0;
+
+					this.getMap(function(x,y,value, type) {
+						var rx = Math.floor(Math.random() * this.tile) + (this.tile / 3);
+						var ry = Math.floor(Math.random() * this.tile) + (this.tile / 2);
+
+						if(value == 0 && placed == false) {
+							if(x >= rx && y >= ry) {
+								placed = true;
+								//Crafty.e('2D, Canvas, Color, Collision, EndPoint').attr({x: x * this.tile, y: y * this.tile, w: this.tile, h: this.tile}).color('#f00');
+								//
+
+								Crafty.e('2D, Canvas, Image, Collision, EndPoint').image('imgs/step_start.png').attr({w: 16, h: 16, x: x * this.tile, y: y * this.tile });
+
+								sx = x * this.tile;
+								sy = y * this.tile;
+								value = 1;
+							}
+						}
+
+
+						if(value == 0 && placed) {
+							if( type == 'topbottom') {
+								var randomNum = Math.floor((Math.random() * 100) + 10);
 								var randomNum2 = Math.floor((Math.random() * 100) + 1);
-								if(randomNum % 2 == 0 && randomNum2 < 20) {
-									var t  = Crafty.e('Torch').attr({x: x * this.tile + 4, y: y * this.tile, w: 8, h: 8});
+								if(randomNum % 2 * this.tile && randomNum2 < 40) {
 
-									// torches could have rotation
+									if(sx != x * this.tile && sy != y * this.tile) {
+										var d = Crafty.e('Door').attr({w: 16, h: 16, x: x * this.tile, y: y * this.tile });
+										d.originaly = y * this.tile;
+									}
+								}
+							//	this.rotation = 45;
+							} else {
+								if(this.level > 0 && placedBeardOil == false) {
+									placedBeardOil = true;
+								var randomNum = Math.floor((Math.random() * 100) + 10);
+							if(randomNum % 2) 
+										Crafty.e('BeardOil').attr({w: 8, h: 8, x: x * this.tile, y: y * this.tile });
+									
 								}
 							}
 						}
+					}.bind(this));
+				},
+
+				this.renderMap = function() {
+					this.map = createMap();
+					var torchplaced = false;
+					this.getMap(function(x,y,value, type) {
+						if(value == 1) {
+							if(type == 'all') {
+								//Crafty.e('2D, Canvas, Color').attr({x: x * this.tile, y: y * this.tile, w: this.tile, h: this.tile}).color('#000');
+								Crafty.e('CellBlank').attr({x: x * this.tile, y: y * this.tile, w: this.tile, h: this.tile}).color('#f90')
+							} else {
+								Crafty.e('Wall').attr({x: x * this.tile, y: y * this.tile, w: this.tile, h: this.tile}).color('#f90');
+
+								if(type != 'topbottom' && type != 'left' && type != 'toprightbottomleft') {
+									var randomNum = Math.floor((Math.random() * 100) + 1);
+									var randomNum2 = Math.floor((Math.random() * 100) + 1);
+									if(randomNum % 2 == 0 && randomNum2 < 20) {
+										var t  = Crafty.e('Torch').attr({x: x * this.tile + 4, y: y * this.tile, w: 8, h: 8});
+
+										// torches could have rotation
+									}
+								}
+							}
+						}
+					}.bind(this));
+				},
+
+				this.getMap = function(callback) {
+					for(var x = 0; x < this.map.length; x++) { // row
+						for(var y = 0; y < this.map.length; y++) { // cols
+							//console.log(map[i][j]);
+							callback(x,y, this.map[x][y], this.getTileType(x,y));
+						}
 					}
-				}.bind(this));
-			},
+			 	},
 
-			this.getMap = function(callback) {
-				for(var x = 0; x < this.map.length; x++) { // row
-					for(var y = 0; y < this.map.length; y++) { // cols
-						//console.log(map[i][j]);
-						callback(x,y, this.map[x][y], this.getTileType(x,y));
+			 	this.getTileType = function(x,y) {
+			 		var g = '';
+					try {
+						if(this.map[x-1][y] != 1) // top border
+							g += 'top';
+					} catch(e) {}
+
+					try {
+						if(this.map[x][y+1] != 1) // rxght border
+							g += 'right'
+					} catch(e) {}
+
+					try {
+						if(this.map[x+1][y] != 1) // bottom border
+							g += 'bottom'
+					} catch(e) {}
+
+					try {
+						if(this.map[x][y-1] != 1) // left border
+							g += 'left';
+					} catch(e) {}
+
+					if(g == '') {
+						g = 'all'
 					}
-				}
-		 	},
+					return g;
+			 	},
 
-		 	this.getTileType = function(x,y) {
-		 		var g = '';
-				try {
-					if(this.map[x-1][y] != 1) // top border
-						g += 'top';
-				} catch(e) {}
+			 	this.mainMenu = function() {
+			 		Crafty.audio.play('menu', -1);
+			 		Crafty.init(dimensions * this.tile, dimensions * this.tile, document.getElementById('game'));
+			 		Crafty.e('2D, Canvas, Image').image('imgs/main_menu.png').attr({w: 600, h: 600})
+			 		 .bind('KeyUp', function(e) {
+					    if (e.key == Crafty.keys.ENTER) {
+					      Crafty.enterScene('GameStart');
+					    }
+					  });
+			 	}
+			 }
 
-				try {
-					if(this.map[x][y+1] != 1) // rxght border
-						g += 'right'
-				} catch(e) {}
-
-				try {
-					if(this.map[x+1][y] != 1) // bottom border
-						g += 'bottom'
-				} catch(e) {}
-
-				try {
-					if(this.map[x][y-1] != 1) // left border
-						g += 'left';
-				} catch(e) {}
-
-				if(g == '') {
-					g = 'all'
-				}
-				return g;
-		 	},
-
-		 	this.mainMenu = function() {
-		 		Crafty.audio.play('menu', -1);
-		 		Crafty.init(dimensions * this.tile, dimensions * this.tile, document.getElementById('game'));
-		 		Crafty.e('2D, Canvas, Image').image('imgs/main_menu.png').attr({w: 600, h: 600})
-		 		 .bind('KeyDown', function(e) {
-				    if (e.key == Crafty.keys.ENTER) {
-				      Crafty.enterScene('GameStart');
-				    }
-				  });
-		 	}
-		 }
-
-		Crafty.defineScene('MainMenu', game.mainMenu.bind(game));
-		Crafty.defineScene('GameOver', game.gameOver.bind(game));
-		Crafty.defineScene('GameStart', game.gameStart.bind(game));
-		Crafty.enterScene('MainMenu');
+			Crafty.defineScene('MainMenu', game.mainMenu.bind(game));
+			Crafty.defineScene('GameOver', game.gameOver.bind(game));
+			Crafty.defineScene('GameStart', game.gameStart.bind(game));
+			Crafty.enterScene('MainMenu');
+			window.focus(); 
+		}
+	    window.onclick = function () { window.focus(); }
 	</script>
 </body>
 </html>
