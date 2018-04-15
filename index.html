@@ -22,6 +22,7 @@
 
 		// Here we're just loading a single sound, and calling it "beep".
 // But you can load multiple assets at once!
+		Crafty.audio.add('menu','audio/menu.mp3');
 		Crafty.audio.add('pain','audio/Pain.mp3');
 		Crafty.audio.add('swoosh', 'audio/swoosh.mp3');
 		Crafty.audio.add('die', 'audio/Nooo.mp3');
@@ -498,6 +499,7 @@
 
 		 	// scenes
 		 	this.gameStart = function() {
+		 		Crafty.audio.remove('menu');
 				Crafty.init(dimensions * this.tile, dimensions * this.tile, document.getElementById('game'));
 				this.renderMap();
 				this.placeStartPoint();
@@ -578,7 +580,7 @@
 								var randomNum = Math.floor((Math.random() * 100) + 1);
 								var randomNum2 = Math.floor((Math.random() * 100) + 1);
 								if(randomNum % 2 == 0 && randomNum2 < 20) {
-									var t  = Crafty.e('Torch').attr({x: x * this.tile + 5, y: y * this.tile, w: 8, h: 8});
+									var t  = Crafty.e('Torch').attr({x: x * this.tile + 4, y: y * this.tile, w: 8, h: 8});
 
 									// torches could have rotation
 								}
@@ -636,6 +638,7 @@
 		 	},
 
 		 	this.mainMenu = function() {
+		 		Crafty.audio.play('menu', -1);
 		 		Crafty.init(dimensions * this.tile, dimensions * this.tile, document.getElementById('game'));
 		 		Crafty.e('2D, Canvas, Image').image('imgs/main_menu.png').attr({w: 600, h: 600})
 		 		 .bind('KeyDown', function(e) {
