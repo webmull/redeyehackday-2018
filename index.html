@@ -94,7 +94,7 @@
 		        this.reel('SlimeAttackSide',500, 0, 6, 3);
 		        this.reel('SlimeAttackUp',500, 0, 7, 3);
 		     	this.hitbox = Crafty.e('2D, Canvas, Color, Collision, SlimeHitArea').attr({health:100, parent: this});
-		        this.slimeListenArea = Crafty.e('2D, Canvas, Color, Collision, SlimeListenArea, WiredHitBox').attr({health:100, parent: this});
+		        this.slimeListenArea = Crafty.e('2D, Canvas, Color, Collision, SlimeListenArea').attr({parent: this});
 
 		        this.state = 'SlimeIdle';
 				this.animate(this.state, -1);
@@ -253,11 +253,8 @@
 		        Crafty.viewport.clampToEntities = true;
   	 	 		Crafty.viewport.bounds = {min:{x:0, y:0}};
   	 	 		Crafty.viewport.clampToEntities = false;
-				//Crafty.viewport.follow(this);
-				//Crafty.viewport.scale(8);
-
-
-
+				Crafty.viewport.follow(this);
+				Crafty.viewport.scale(8);
 
 		        this.bind('Move', function(evt) {
 
@@ -431,7 +428,7 @@
 				this.getMap(function(x,y,value, type) {
 					var rx = Math.floor(Math.random() * 20) + 8;
 					var ry = Math.floor(Math.random() * 20) + 8;
-					var number = 1;
+					var number = 4;
 
 					if(value == 0 && placed < number) {
 						if(x >= rx && y >= ry) {
