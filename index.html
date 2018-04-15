@@ -297,6 +297,7 @@
 	    					slimeCollisions[j].obj.health -= 1.8;
 	    					if(slimeCollisions[j].obj.health <= 0) {
 	    						slimeCollisions[j].obj.parent.destroy();
+	    						this.game.score += 1;
 	    					}
 	    				}
 
@@ -392,7 +393,7 @@
 					if(this.game) {
 						//new Crafty.polygon([-50, -50, -50, -20, -20, -20, -50,-20]);
 						this.healthText.attr({x: this.x -35, y: this.y - 35}).text('Health:' + Math.round(this.hitbox.health)).color('black');
-						this.scoreText.attr({x: this.x -35, y: this.y - 31}).text('Score:');
+						this.scoreText.attr({x: this.x -35, y: this.y - 31}).text('Score:' + this.game.score);
 						this.levelText.attr({x: this.x -35, y: this.y - 27}).text('Level:' + this.game.level);
 						//this.scoreBgr.attr({x: this.x -35, y: this.y -35, w: 30, h: 30}).color('black');
 		        	}
@@ -467,6 +468,7 @@
 		 	this.tile = 16;
 		 	this.map = [];
 		 	this.level = 0;
+		 	this.score = 0;
 
 		 	this.gameOver = function() {
 		 		this.level = 0;
