@@ -444,7 +444,7 @@
 
 						Crafty.audio.play('pain');
 						this.hitbox.health -= 0.2;
-						if(this.hitbox.health < 0) {
+						if(this.hitbox.health <= 0) {
 							Crafty.enterScene('GameOver'); // player dead - game over
 						}
 					}
@@ -650,7 +650,7 @@
 		Crafty.defineScene('MainMenu', game.mainMenu.bind(game));
 		Crafty.defineScene('GameOver', game.gameOver.bind(game));
 		Crafty.defineScene('GameStart', game.gameStart.bind(game));
-		Crafty.enterScene('GameStart');
+		Crafty.enterScene('MainMenu');
 	</script>
 </body>
 </html>
