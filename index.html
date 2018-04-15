@@ -9,8 +9,9 @@
   	}
   	#game
 	{
-		background:#636363;
-	    display: block;
+		/*background:#636363;*/
+		background: url('imgs/floor.png') repeat;
+	    /*display: block;*/
 	    margin: 0px auto;
 	}
   	</style>
@@ -266,9 +267,10 @@
                 this.reel('PlayerHitSide',500, 0, 9, 3);
                 this.reel('PlayerHitDown',500, 0, 10, 3);
 		     	this.hitbox = Crafty.e('2D, Canvas, Color, Collision, PlayerHitArea').attr({health:100});
-		     	this.healthText = Crafty.e('2D, Canvas, Text').attr({x: 0, y: 0}).textColor('red').textFont({ size: '4px', weight: 'bold' });
-		     	this.scoreText = Crafty.e('2D, Canvas, Text').textColor('red').textFont({ size: '4px', weight: 'bold' });;
-		     	this.levelText = Crafty.e('2D, Canvas, Text').textColor('red').textFont({ size: '4px', weight: 'bold' });;
+		     	this.healthText = Crafty.e('2D, Canvas, Color, Text').attr({x: 0, y: 0}).textColor('red').textFont({ size: '4px', weight: 'bold' }).color('black');;
+		     	this.scoreText = Crafty.e('2D, Canvas, Color, Text').textColor('red').textFont({ size: '4px', weight: 'bold' }).color('black');;
+		     	this.levelText = Crafty.e('2D, Canvas, Color, Text').textColor('red').textFont({ size: '4px', weight: 'bold' }).color('black');;
+		     	this.scoreBgr = Crafty.e('2D, Canvas, Color').attr({x: 0, y: 0, w: 30, h: 30}).color('black');;
 
 		        this.state = 'PlayerIdle';
 				this.animate(this.state, -1);
@@ -386,9 +388,11 @@
 
 				this.bind('UpdateFrame', function() {
 					if(this.game) {
-						this.healthText.attr({x: this.x -35, y: this.y - 35}).text('Health:' + this.hitbox.health);
+						//new Crafty.polygon([-50, -50, -50, -20, -20, -20, -50,-20]);
+						this.healthText.attr({x: this.x -35, y: this.y - 35}).text('Health:' + Math.round(this.hitbox.health)).color('black');
 						this.scoreText.attr({x: this.x -35, y: this.y - 31}).text('Score:');
 						this.levelText.attr({x: this.x -35, y: this.y - 27}).text('Level:' + this.game.level);
+						//this.scoreBgr.attr({x: this.x -35, y: this.y -35, w: 30, h: 30}).color('black');
 		        	}
 
 					var k = false;
