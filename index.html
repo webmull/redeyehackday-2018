@@ -324,7 +324,7 @@
 
 						for(var j = 0; j < slimeCollisions.length; j++) {
 		    				if(this.attacking) {
-		    					slimeCollisions[j].obj.health -= 1.8;
+		    					slimeCollisions[j].obj.health -= 0.8;
 		    					if(slimeCollisions[j].obj.health <= 0) {
 		    						slimeCollisions[j].obj.parent.destroy();
 		    						this.game.score += 1;
@@ -340,7 +340,7 @@
 		    		
 		    			setTimeout(function() {
 		    				this.beingHit = false;
-		    			}.bind(this), 2000)
+		    			}.bind(this), 400)
 		    			
 						this.hitbox.resetHitChecks();
 					}.bind(this));
@@ -428,6 +428,7 @@
 			        })
 
 					this.bind('UpdateFrame', function() {
+						this.game.playerHealth = this.hitbox.health;
 						if(this.game) {
 							//new Crafty.polygon([-50, -50, -50, -20, -20, -20, -50,-20]);
 							this.healthText.attr({x: this.x -35, y: this.y - 35}).text('Health:' + Math.round(this.hitbox.health)).color('black');
@@ -506,6 +507,7 @@
 			 	this.map = [];
 			 	this.level = 0;
 			 	this.score = 0;
+			 	this.playerHealth = 0;
 
 			 	this.gameOver = function() {
 			 		this.level = 0;
@@ -541,17 +543,22 @@
 			 	// scenes
 			 	this.gameStart = function() {
 					Crafty.audio.remove('menu');
-					Crafty.init(dimensions * this.tile, dimensions * this.tile, document.getElementById('game'));
 					this.level += 1;
+					
+					Crafty.init(dimensions * this.tile, dimensions * this.tile, document.getElementById('game'));
+					
 					this.renderMap();
 					this.placeStartPoint();
 					this.placeEndPoint();
 					this.placeEnemies();
+
+					if(this.level > 1) {
+						Crafty('Player').hitbox.health = this.playerHealth;
+					}
 					
 					setTimeout(function() {
 						Crafty.audio.play('start');
 			 		}, 500);
-
 				},
 
 				this.placeEnemies = function() {
