@@ -256,12 +256,8 @@
 				Crafty.viewport.scale(8);
 
 		        this.bind('Move', function(evt) {
-
-
-
 		        	this.hitbox.attr({x: (this.x + this.w / 2) - 3, y: (this.y + this.h / 2) - 3, w: 5, h: 6});
 		        	
-
 		        	if(this.collide == false) {
 		        		return;
 		        	}
@@ -299,7 +295,7 @@
 		    				if(this.attacking) {
 		    					slimeCollisions[j].obj.health -= 1.8;
 		    					if(slimeCollisions[j].obj.health <= 0) {
-		    						slimeCollisions[j].obj.parent.destroy();
+		    						slimeCollisions[j].obj.parent.destrdsaoy();
 		    					}
 		    				}
 		    			}
@@ -455,7 +451,7 @@
 							placed = true;
 							//Crafty.e('2D, Canvas, Color').attr({x: x * this.tile, y: y * this.tile, w: this.tile, h: this.tile}).color('#0f0');
 
-							Crafty.e('2D, Canvas, Image').image('imgs/step_start.png').attr({w: 32, h: 32, x: x * this.tile, y: y * this.tile });
+							Crafty.e('2D, Canvas, Image').image('imgs/step_finish.png').attr({w: 16, h: 16, x: x * this.tile, y: y * this.tile });
 
 							var player = Crafty.e('Player').attr({x: x * this.tile, y: y * this.tile});
 							player.collide = true;
@@ -477,7 +473,7 @@
 							//Crafty.e('2D, Canvas, Color, Collision, EndPoint').attr({x: x * this.tile, y: y * this.tile, w: this.tile, h: this.tile}).color('#f00');
 							//
 
-							Crafty.e('2D, Canvas, Image, Collision, EndPoint').image('imgs/step_finish.png').attr({w: 22, h: 16, x: x * this.tile, y: y * this.tile });
+							Crafty.e('2D, Canvas, Image, Collision, EndPoint').image('imgs/step_start.png').attr({w: 16, h: 16, x: x * this.tile, y: y * this.tile });
 						}
 					}
 				}.bind(this));
