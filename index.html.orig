@@ -17,7 +17,7 @@
 <body>dsa
 	<div id="game"></div>
 	<script type="text/javascript">
-		var dimensions = 22;
+		var dimensions = 24;
 
 		// Here we're just loading a single sound, and calling it "beep".
 // But you can load multiple assets at once!
@@ -249,15 +249,22 @@
 		        this.camera = false;
 		        this.collide = false;
 		        this.beingHit = false;
+<<<<<<< HEAD
 
 		        Crafty.viewport.clampToEntities = true;
   	 	 		Crafty.viewport.bounds = {min:{x:0, y:0}};
+=======
+		        this.level = 1;
+		       
+		        Crafty.viewport.clampToEntities = false;
+  	 	 		Crafty.viewport.bounds = {min:{x:0, y:0}, max:{x:20, y:20}};
+>>>>>>> a2ca3d18a454783b8181e0a67e830a47a71cfa10
   	 	 		Crafty.viewport.clampToEntities = false;
 				//Crafty.viewport.follow(this);
 				//Crafty.viewport.scale(8);
+				
 
-
-
+				
 
 		        this.bind('Move', function(evt) {
 
@@ -354,6 +361,17 @@
 						}
 					}
 
+<<<<<<< HEAD
+
+=======
+					var healthText = Crafty.e('2D, DOM, Text')
+				.attr({x: 10, y: 10}).textColor('red');;
+				healthText.text('Health:'+ this.hitbox.health);
+				var levelText = Crafty.e('2D, DOM, Text')
+				.attr({x: 10, y: 20}).textColor('red');;
+				levelText.text('Level:'+ this.level);
+				
+>>>>>>> a2ca3d18a454783b8181e0a67e830a47a71cfa10
 					if(this.beingHit) {
 						state = 'PlayerHitUp';
 						Crafty.audio.play('pain');
